@@ -1,7 +1,6 @@
 "use client";
 
 import { motion, useMotionValue, useSpring, useTransform } from "framer-motion";
-import Link from "next/link";
 import { ArrowUpRight } from "lucide-react";
 import clsx from "clsx";
 
@@ -20,7 +19,7 @@ export function FeaturedProjectCard({ name, description, href }: FeaturedProject
   const overlayOpacity = useTransform(springX, [-12, 0, 12], [0.2, 0.08, 0.2]);
 
   return (
-    <Link href={href} target="_blank" rel="noreferrer" className="group block">
+    <a href={href} target="_blank" rel="noreferrer" className="group block">
       <motion.div
         className="relative overflow-hidden rounded-3xl border border-ink/10 bg-white/60 shadow-card"
         style={{ rotateX: springY, rotateY: springX, transformStyle: "preserve-3d" }}
@@ -79,6 +78,6 @@ export function FeaturedProjectCard({ name, description, href }: FeaturedProject
           </div>
         </div>
       </motion.div>
-    </Link>
+    </a>
   );
 }
