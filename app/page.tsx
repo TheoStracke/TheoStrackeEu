@@ -1,6 +1,6 @@
 "use client";
 
-import { motion, AnimatePresence } from "framer-motion";
+import { motion } from "framer-motion";
 import { Github, Linkedin, Mail, MapPin, ArrowUpRight } from "lucide-react";
 import Image from "next/image";
 import { useState } from "react";
@@ -61,12 +61,6 @@ const education = [
 
 const skills = ["SQL", "Python", "JavaScript", "Troubleshooting", "Automação", "Power BI", "Suporte Nível 2", "React"];
 
-const socials = [
-  { label: "Email", href: "mailto:theostracke11@gmail.com", icon: <Mail size={18} /> },
-  { label: "LinkedIn", href: "https://linkedin.com/in/theostracke", icon: <Linkedin size={18} /> },
-  { label: "GitHub", href: "https://github.com/theostracke", icon: <Github size={18} /> },
-];
-
 interface ActiveExperience {
   type: "experience" | "education";
   company: string;
@@ -76,28 +70,41 @@ interface ActiveExperience {
 export default function Page() {
   const [activeModal, setActiveModal] = useState<ActiveExperience | null>(null);
 
+  const socials = [
+    {
+      label: "Email",
+      href: "mailto:theostracke11@gmail.com",
+      icon: <Mail size={18} />
+    },
+    {
+      label: "LinkedIn",
+      href: "https://linkedin.com/in/theostracke",
+      icon: <Linkedin size={18} />
+    },
+    {
+      label: "GitHub",
+      href: "https://github.com/theostracke",
+      icon: <Github size={18} />
+    }
+  ];
+
   return (
     <main className="bg-background text-ink">
       <SideNav />
       <NeuralOverlay
         skills={activeModal?.skills || []}
         title={activeModal?.company || ""}
-        logo={activeModal?.type === "experience" 
-          ? experiences.find(e => e.company === activeModal?.company)?.logo 
-          : education.find(e => e.institution === activeModal?.company)?.logo
+        logo={
+          activeModal?.type === "experience"
+            ? experiences.find((e) => e.company === activeModal?.company)?.logo
+            : education.find((e) => e.institution === activeModal?.company)?.logo
         }
         isOpen={!!activeModal}
         onClose={() => setActiveModal(null)}
       />
       <div className="mx-auto flex min-h-screen max-w-6xl flex-col gap-20 px-6 pb-24 pt-16 md:px-12 lg:px-20">
         <header className="flex items-center justify-between text-xs uppercase tracking-wider text-neutral-500">
-          <Image 
-            src="/images/logos/ts.svg" 
-            alt="TS Logo" 
-            width={40}
-            height={40}
-            className="h-10 w-auto"
-          />
+          <Image src="/images/logos/ts.svg" alt="TS Logo" width={40} height={40} className="h-10 w-auto" />
           <span className="flex items-center gap-2 font-mono text-[13px]">
             <MapPin size={14} /> Palhoça, SC
           </span>
@@ -168,16 +175,22 @@ export default function Page() {
             </Reveal>
             <Reveal delay={0.1}>
               <div className="flex flex-col gap-3 text-sm uppercase tracking-[0.2em] text-neutral-600">
-                <span className="flex items-center gap-2"><ArrowUpRight size={16} /> Suporte técnico + Engenharia leve</span>
-                <span className="flex items-center gap-2"><ArrowUpRight size={16} /> Processos escaláveis e mensuráveis</span>
-                <span className="flex items-center gap-2"><ArrowUpRight size={16} /> Automação enxuta para times enxutos</span>
+                <span className="flex items-center gap-2">
+                  <ArrowUpRight size={16} /> Suporte técnico + Engenharia leve
+                </span>
+                <span className="flex items-center gap-2">
+                  <ArrowUpRight size={16} /> Processos escaláveis e mensuráveis
+                </span>
+                <span className="flex items-center gap-2">
+                  <ArrowUpRight size={16} /> Automação enxuta para times enxutos
+                </span>
               </div>
             </Reveal>
           </div>
         </section>
 
         <section id="experience" className="space-y-10">
-          <SectionHeading label="Experiência" eyebrow="Timeline" />
+          <SectionHeading label="Experiência" eyebrow="Profissional" />
           <div>
             {experiences.map((exp) => (
               <Reveal key={exp.company} className="relative w-full py-12 border-b border-neutral-200">
@@ -238,7 +251,7 @@ export default function Page() {
           <Reveal>
             <FeaturedProjectCard
               name="DespaFácil"
-              description="Plataforma de simplificação de despachos e documentação. Projeto realizado junto a Rede Vellum focado em UX e eficiência."
+              description="Aplicação SaaS para gestão de despesas e finanças pessoais."
               href="https://despa-facil.vercel.app/"
             />
           </Reveal>
@@ -248,8 +261,7 @@ export default function Page() {
           <SectionHeading label="Conecte-se" eyebrow="Contato" />
           <div className="flex flex-wrap items-center gap-4 text-sm uppercase tracking-[0.18em] text-neutral-600">
             {socials.map((item) => (
-              <Link
-               a
+              <a
                 key={item.label}
                 href={item.href}
                 target={item.label !== "Email" ? "_blank" : undefined}
@@ -258,7 +270,8 @@ export default function Page() {
               >
                 <span className="text-ink/80 group-hover:text-ink">{item.icon}</span>
                 <span>{item.label}</span>
-              </a
+              </a>
+            ))}
             <span className="flex items-center gap-2 text-xs text-neutral-500">
               <MapPin size={16} /> Palhoça, SC - Brasil
             </span>
