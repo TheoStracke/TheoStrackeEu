@@ -42,12 +42,12 @@ export function MagneticButton({ href, children, className, target, rel }: Magne
         target={target}
         rel={rel}
         className={clsx(
-          "group relative inline-flex items-center gap-3 rounded-full border border-ink px-6 py-3 text-sm uppercase tracking-[0.18em] transition-colors duration-300",
+          "group relative inline-flex items-center gap-3 rounded-full border border-ink px-8 py-3 font-mono text-[13px] uppercase tracking-wide transition-colors duration-300",
           "hover:bg-ink hover:text-background",
           className
         )}
       >
-        <span className="relative z-10 font-semibold">{children}</span>
+        <span className="relative z-10 font-medium">{children}</span>
         <span className="relative z-10 h-[6px] w-[6px] rounded-full bg-ink transition-colors duration-300 group-hover:bg-background" />
         <motion.span
           aria-hidden

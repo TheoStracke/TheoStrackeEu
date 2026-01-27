@@ -1,13 +1,18 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import { Github, Linkedin, Mail, MapPin, ArrowUpRight } from "lucide-react";
 import Link from "next/link";
+import Image from "next/image";
+import { useState } from "react";
 import { FeaturedProjectCard } from "./components/featured-project-card";
 import { MagneticButton } from "./components/magnetic-button";
 import { Marquee } from "./components/marquee";
+import { MorphingButton } from "./components/morphing-button";
+import { NeuralOverlay } from "./components/neural-overlay";
 import { Reveal } from "./components/reveal";
 import { SectionHeading } from "./components/section-heading";
+import { SideNav } from "./components/side-nav";
 
 const experiences = [
   {
@@ -16,6 +21,7 @@ const experiences = [
     role: "Analista de Suporte Técnico",
     details: "Foco em triagem, diagnóstico e resolução de incidentes. Redução de 20% no tempo médio de resolução.",
     logo: "/images/logos/vellum.png",
+    skills: ["RPA & Automation", "SLA Optimization", "Full-Cycle Incident Mgmt", "Gestão de Identidade Digital", "SaaS Troubleshooting"],
   },
   {
     company: "Thomson Reuters Brasil",
@@ -23,6 +29,7 @@ const experiences = [
     role: "Técnico de Suporte de Relatórios",
     details: "Automação de rotinas (Python/SQL) e diagnósticos em ambientes críticos.",
     logo: "/images/logos/thomson-reuters.png",
+    skills: ["Advanced SQL Querying", "Mission-Critical Support", "Financial Data Integrity", "Legacy System Maintenance", "Data Analytics"],
   },
   {
     company: "Exército Brasileiro",
@@ -30,6 +37,7 @@ const experiences = [
     role: "",
     details: "Disciplina, organização e operações logísticas sob pressão.",
     logo: "/images/logos/exercito.png",
+    skills: ["Crisis Resource Mgmt", "Strategic Logistics", "High-Stakes Decision Making", "Operational Compliance", "Inventory Control"],
   },
 ];
 
@@ -40,6 +48,7 @@ const education = [
     period: "2023 - 2026",
     type: "Graduação",
     logo: "/images/logos/senac.png",
+    skills: ["Software Architecture", "CI/CD Pipelines", "Agile/Scrum Methodologies", "Relational Database Design", "System Scalability"],
   },
   {
     degree: "Programação de Jogos Digitais",
@@ -47,6 +56,7 @@ const education = [
     period: "2020 - 2023",
     type: "Técnico",
     logo: "/images/logos/senac.png",
+    skills: ["Real-time Engines (Unity)", "3D Asset Pipeline", "C# OOP", "Immersive UX Design", "Physics Simulation"],
   },
 ];
 
@@ -58,33 +68,58 @@ const socials = [
   { label: "GitHub", href: "https://github.com/theostracke", icon: <Github size={18} /> },
 ];
 
+interface ActiveExperience {
+  type: "experience" | "education";
+  company: string;
+  skills: string[];
+}
+
 export default function Page() {
+  const [activeModal, setActiveModal] = useState<ActiveExperience | null>(null);
+
   return (
     <main className="bg-background text-ink">
+      <SideNav />
+      <NeuralOverlay
+        skills={activeModal?.skills || []}
+        title={activeModal?.company || ""}
+        logo={activeModal?.type === "experience" 
+          ? experiences.find(e => e.company === activeModal?.company)?.logo 
+          : education.find(e => e.institution === activeModal?.company)?.logo
+        }
+        isOpen={!!activeModal}
+        onClose={() => setActiveModal(null)}
+      />
       <div className="mx-auto flex min-h-screen max-w-6xl flex-col gap-20 px-6 pb-24 pt-16 md:px-12 lg:px-20">
-        <header className="flex items-center justify-between text-xs uppercase tracking-[0.22em] text-neutral-500">
-          <span>Portfólio 2026</span>
-          <span className="flex items-center gap-2">
+        <header className="flex items-center justify-between text-xs uppercase tracking-wider text-neutral-500">
+          <Image 
+            src="/images/logos/ts.svg" 
+            alt="TS Logo" 
+            width={40}
+            height={40}
+            className="h-10 w-auto"
+          />
+          <span className="flex items-center gap-2 font-mono text-[13px]">
             <MapPin size={14} /> Palhoça, SC
           </span>
         </header>
 
-        <section className="relative grid min-h-[70vh] grid-cols-1 items-center gap-12 lg:grid-cols-[1fr_320px]">
+        <section id="hero" className="relative grid min-h-[70vh] grid-cols-1 items-center gap-12 lg:grid-cols-[1fr_320px]">
           <div className="space-y-8">
             <Reveal>
-              <p className="text-sm uppercase tracking-[0.28em] text-neutral-500">Radical Minimalismo</p>
+              <p className="font-mono text-[12px] uppercase tracking-wider text-neutral-500">Radical Minimalismo</p>
             </Reveal>
             <div className="space-y-6">
               <motion.h1
                 initial={{ opacity: 0, y: 40 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 1, ease: [0.2, 0.8, 0.2, 1] }}
-                className="font-display text-5xl leading-[0.9] sm:text-6xl md:text-7xl lg:text-8xl"
+                className="font-display text-5xl leading-[0.9] tracking-[-0.02em] font-bold sm:text-6xl md:text-7xl lg:text-8xl"
               >
                 THEO STRACKE.
               </motion.h1>
               <Reveal>
-                <p className="max-w-2xl text-lg text-neutral-700 md:text-xl">
+                <p className="max-w-2xl text-lg leading-relaxed text-neutral-700 md:text-xl">
                   Analista de Suporte & Desenvolvedor de Sistemas.
                 </p>
               </Reveal>
@@ -103,7 +138,7 @@ export default function Page() {
             </div>
           </div>
 
-          <div className="relative flex flex-col gap-6 rounded-3xl border border-ink/10 bg-white/60 p-8 shadow-glow">
+          <div id="about" className="relative flex flex-col gap-6 rounded-3xl border border-ink/10 bg-white/60 p-8 shadow-glow">
             <Reveal>
               <p className="text-sm leading-relaxed text-neutral-700">
                 Tenho 20 anos e transformo problemas complexos em soluções eficientes. Com background sólido em Suporte
@@ -128,7 +163,7 @@ export default function Page() {
             <Reveal>
               <p className="max-w-xl text-xl leading-relaxed text-neutral-700">
                 Busco entregar confiabilidade e clareza. Minha abordagem é de produto: entender o problema, prototipar
-                rápido, medir impacto e iterar. O resultado é um stack de suporte e desenvolvimento que reduz ruído e
+                rápido, medir impacto e iterar. Programador low-code focado em automação e desenvolvimento ágil. O resultado é um stack de suporte e desenvolvimento que reduz ruído e
                 mantém operações no eixo.
               </p>
             </Reveal>
@@ -149,9 +184,14 @@ export default function Page() {
               <Reveal key={exp.company} className="relative w-full py-12 border-b border-neutral-200">
                 <div className="w-full pr-32 space-y-3">
                   <p className="text-xs uppercase tracking-[0.22em] text-neutral-500">{exp.period}</p>
-                  <div className="space-y-1">
-                    <p className="font-display text-2xl md:text-3xl">{exp.company}</p>
-                    {exp.role && <p className="text-sm uppercase tracking-[0.18em] text-neutral-600">{exp.role}</p>}
+                  <div className="space-y-1 flex items-start justify-between">
+                    <div>
+                      <p className="font-display text-2xl md:text-3xl">{exp.company}</p>
+                      {exp.role && <p className="text-sm uppercase tracking-[0.18em] text-neutral-600">{exp.role}</p>}
+                    </div>
+                    <MorphingButton
+                      onClick={() => setActiveModal({ type: "experience", company: exp.company, skills: exp.skills })}
+                    />
                   </div>
                   <p className="text-lg leading-relaxed text-neutral-700">{exp.details}</p>
                 </div>
@@ -170,9 +210,14 @@ export default function Page() {
               <Reveal key={edu.degree} className="relative w-full py-12 border-b border-neutral-200">
                 <div className="w-full pr-32 space-y-3">
                   <p className="text-xs uppercase tracking-[0.22em] text-neutral-500">{edu.period}</p>
-                  <div className="space-y-1">
-                    <p className="font-display text-2xl md:text-3xl">{edu.institution}</p>
-                    <p className="text-sm uppercase tracking-[0.18em] text-neutral-600">{edu.type}</p>
+                  <div className="space-y-1 flex items-start justify-between">
+                    <div>
+                      <p className="font-display text-2xl md:text-3xl">{edu.institution}</p>
+                      <p className="text-sm uppercase tracking-[0.18em] text-neutral-600">{edu.type}</p>
+                    </div>
+                    <MorphingButton
+                      onClick={() => setActiveModal({ type: "education", company: edu.institution, skills: edu.skills })}
+                    />
                   </div>
                   <p className="text-lg leading-relaxed text-neutral-700">{edu.degree}</p>
                 </div>
@@ -194,7 +239,7 @@ export default function Page() {
           <Reveal>
             <FeaturedProjectCard
               name="DespaFácil"
-              description="Plataforma de simplificação de despachos e documentação. Projeto pessoal focado em UX e eficiência."
+              description="Plataforma de simplificação de despachos e documentação. Projeto realizado junto a Rede Vellum focado em UX e eficiência."
               href="https://despa-facil.vercel.app/"
             />
           </Reveal>
