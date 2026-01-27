@@ -1,7 +1,6 @@
 "use client";
 
 import { motion, useMotionValue, useSpring } from "framer-motion";
-import Link from "next/link";
 import { useCallback } from "react";
 import clsx from "clsx";
 
@@ -37,7 +36,7 @@ export function MagneticButton({ href, children, className, target, rel }: Magne
       style={{ x: springX, y: springY }}
       className="inline-block"
     >
-      <Link
+      <a
         href={href}
         target={target}
         rel={rel}
@@ -55,7 +54,7 @@ export function MagneticButton({ href, children, className, target, rel }: Magne
           whileHover={{ opacity: 0.08 }}
           whileTap={{ scale: 0.98 }}
         />
-      </Link>
+      </a>
     </motion.div>
   );
 }
