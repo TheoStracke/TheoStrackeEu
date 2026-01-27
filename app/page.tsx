@@ -18,17 +18,17 @@ const experiences = [
     company: "Rede Vellum",
     period: "Jul/2025 – Atual",
     role: "Analista de Suporte Técnico",
-    details: "Foco em triagem, diagnóstico e resolução de incidentes. Redução de 20% no tempo médio de resolução.",
+    details: "Desenvolvi automações e scripts (Python/Node.js) para operações, integrei dados via SQL/APIs e diagnostiquei bugs em produção. Otimizei confiabilidade e reduzi MTTR em 20% com métricas e melhorias de estabilidade.",
     logo: "/images/logos/vellum.png",
-    skills: ["RPA & Automation", "SLA Optimization", "Full-Cycle Incident Mgmt", "Gestão de Identidade Digital", "SaaS Troubleshooting"],
+    skills: ["RPA e Automação", "Otimização de SLA", "Gestão de Incidentes de Ciclo Completo", "Gestão de Identidade Digital", "Diagnóstico SaaS"],
   },
   {
     company: "Thomson Reuters Brasil",
     period: "Fev/2023 – Mar/2025",
     role: "Técnico de Suporte de Relatórios",
-    details: "Automação de rotinas (Python/SQL) e diagnósticos em ambientes críticos.",
+    details: "Automação de rotinas com Python e SQL, manutenção de relatórios e pipelines. Investigação de incidentes em ambientes críticos, otimização de consultas e diagnóstico de performance/bugs com foco em estabilidade.",
     logo: "/images/logos/thomson-reuters.png",
-    skills: ["Advanced SQL Querying", "Mission-Critical Support", "Financial Data Integrity", "Legacy System Maintenance", "Data Analytics"],
+    skills: ["Consultas SQL Avançadas", "Suporte a Sistemas Críticos", "Integridade de Dados Financeiros", "Manutenção de Sistemas Legados", "Análise de Dados"],
   },
   {
     company: "Exército Brasileiro",
@@ -36,7 +36,7 @@ const experiences = [
     role: "",
     details: "Disciplina, organização e operações logísticas sob pressão.",
     logo: "/images/logos/exercito.png",
-    skills: ["Crisis Resource Mgmt", "Strategic Logistics", "High-Stakes Decision Making", "Operational Compliance", "Inventory Control"],
+    skills: ["Gestão de Recursos em Crises", "Logística Estratégica", "Tomada de Decisão sob Alta Pressão", "Conformidade Operacional", "Controle de Inventário"],
   },
 ];
 
@@ -47,7 +47,7 @@ const education = [
     period: "2023 - 2026",
     type: "Graduação",
     logo: "/images/logos/senac.png",
-    skills: ["Software Architecture", "CI/CD Pipelines", "Agile/Scrum Methodologies", "Relational Database Design", "System Scalability"],
+    skills: ["Arquitetura de Software", "Pipelines de CI/CD", "Metodologias Ágeis/Scrum", "Modelagem de Banco de Dados Relacional", "Escalabilidade de Sistemas"],
   },
   {
     degree: "Programação de Jogos Digitais",
@@ -55,11 +55,11 @@ const education = [
     period: "2020 - 2023",
     type: "Técnico",
     logo: "/images/logos/senac.png",
-    skills: ["Real-time Engines (Unity)", "3D Asset Pipeline", "C# OOP", "Immersive UX Design", "Physics Simulation"],
+    skills: ["Engines em Tempo Real (Unity)", "Pipeline de Assets 3D", "POO em C#", "UX Imersiva", "Simulação Física"],
   },
 ];
 
-const skills = ["SQL", "Python", "JavaScript", "Troubleshooting", "Automação", "Power BI", "Suporte Nível 2", "React"];
+const skills = ["React", "Node.js", "Python", "JavaScript", "SQL", "Automação", "Troubleshooting", "Power BI"];
 
 interface ActiveExperience {
   type: "experience" | "education";
@@ -126,7 +126,7 @@ export default function Page() {
               </motion.h1>
               <Reveal>
                 <p className="max-w-2xl text-lg leading-relaxed text-neutral-700 md:text-xl">
-                  Analista de Suporte & Desenvolvedor de Sistemas.
+                  Desenvolvedor de Sistemas Web (React · Node.js · Python · SQL) com background sólido em operações e suporte.
                 </p>
               </Reveal>
             </div>
@@ -169,8 +169,7 @@ export default function Page() {
             <Reveal>
               <p className="max-w-xl text-xl leading-relaxed text-neutral-700">
                 Busco entregar confiabilidade e clareza. Minha abordagem é de produto: entender o problema, prototipar
-                rápido, medir impacto e iterar. Programador low-code focado em automação e desenvolvimento ágil. O resultado é um stack de suporte e desenvolvimento que reduz ruído e
-                mantém operações no eixo.
+                rápido, medir impacto e iterar. Desenvolvimento ágil de soluções escaláveis em React, Node.js, Python e SQL — com foco em automação, observabilidade e estabilidade. O resultado é um stack que reduz ruído e mantém operações no eixo.
               </p>
             </Reveal>
             <Reveal delay={0.1}>
@@ -251,7 +250,7 @@ export default function Page() {
           <Reveal>
             <FeaturedProjectCard
               name="DespaFácil"
-              description="Aplicação SaaS para gestão de despesas e finanças pessoais."
+              description="SaaS de gestão financeira com UX enxuta e foco em produtividade. Tech stack: React, Node.js, Python, SQL."
               href="https://despa-facil.vercel.app/"
             />
           </Reveal>
