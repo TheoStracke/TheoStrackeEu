@@ -2,7 +2,6 @@
 
 import { motion, AnimatePresence } from "framer-motion";
 import { Github, Linkedin, Mail, MapPin, ArrowUpRight } from "lucide-react";
-import Link from "next/link";
 import Image from "next/image";
 import { useState } from "react";
 import { FeaturedProjectCard } from "./components/featured-project-card";
@@ -250,6 +249,7 @@ export default function Page() {
           <div className="flex flex-wrap items-center gap-4 text-sm uppercase tracking-[0.18em] text-neutral-600">
             {socials.map((item) => (
               <Link
+               a
                 key={item.label}
                 href={item.href}
                 target={item.label !== "Email" ? "_blank" : undefined}
@@ -258,8 +258,7 @@ export default function Page() {
               >
                 <span className="text-ink/80 group-hover:text-ink">{item.icon}</span>
                 <span>{item.label}</span>
-              </Link>
-            ))}
+              </a
             <span className="flex items-center gap-2 text-xs text-neutral-500">
               <MapPin size={16} /> Palhoça, SC - Brasil
             </span>
