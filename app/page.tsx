@@ -4,7 +4,7 @@ import { motion } from "framer-motion";
 import { Github, Linkedin, Mail, MapPin, ArrowUpRight } from "lucide-react";
 import Image from "next/image";
 import { useState } from "react";
-import { FeaturedProjectCard } from "./components/featured-project-card";
+import { ProjectCard } from "./components/project-card";
 import { MagneticButton } from "./components/magnetic-button";
 import { Marquee } from "./components/marquee";
 import { MorphingButton } from "./components/morphing-button";
@@ -60,6 +60,35 @@ const education = [
 ];
 
 const skills = ["React", "Node.js", "Python", "JavaScript", "SQL", "Automação", "Troubleshooting", "Power BI"];
+
+const projects = [
+  {
+    title: "DespaFácil",
+    description: "SaaS de gestão financeira com UX enxuta e foco em produtividade. Simplified expense tracking para times que valorizam eficiência.",
+    technologies: ["React", "Node.js", "Python", "SQL"],
+    href: "https://despa-facil.vercel.app/",
+    thumbnail: "/images/projects/despafacil-thumb.svg",
+    logo: "/images/logos/logodespafacil.svg",
+    gallery: [
+      "/images/projects/despafacil-1.png",
+      "/images/projects/despafacil-2.png",
+      "/images/projects/despafacil-3.png"
+    ]
+  },
+  {
+    title: "SISCED",
+    description: "Sistema de automação operacional e gestão de incidentes. Pipeline de monitoramento e resolução de issues em tempo real com RPA e observabilidade integrada.",
+    technologies: ["React", "Node.js", "Python", "SQL"],
+    href: "https://sisced.redevellum.com.br",
+    thumbnail: "/images/projects/sisced-thumb.svg",
+    logo: "/images/logos/logosisced.svg",
+    gallery: [
+      "/images/projects/sisced-1.png",
+      "/images/projects/sisced-2.png",
+      "/images/projects/sisced-3.png"
+    ]
+  },
+];
 
 interface ActiveExperience {
   type: "experience" | "education";
@@ -246,14 +275,22 @@ export default function Page() {
         </section>
 
         <section id="projects" className="space-y-10">
-          <SectionHeading label="DespaFácil" eyebrow="Projeto em Destaque" />
-          <Reveal>
-            <FeaturedProjectCard
-              name="DespaFácil"
-              description="SaaS de gestão financeira com UX enxuta e foco em produtividade. Tech stack: React, Node.js, Python, SQL."
-              href="https://despa-facil.vercel.app/"
-            />
-          </Reveal>
+          <SectionHeading label="Projetos" eyebrow="Trabalhos Recentes" />
+          <div className="grid items-stretch gap-8 md:gap-10 lg:grid-cols-2 p-1">
+            {projects.map((project, index) => (
+              <Reveal key={project.title} delay={index * 0.15}>
+                <ProjectCard
+                  title={project.title}
+                  description={project.description}
+                  technologies={project.technologies}
+                  href={project.href}
+                  thumbnail={project.thumbnail}
+                  logo={project.logo}
+                  gallery={project.gallery}
+                />
+              </Reveal>
+            ))}
+          </div>
         </section>
 
         <footer id="connect" className="space-y-8 rounded-3xl border border-ink/10 bg-white/60 p-10 shadow-card">
