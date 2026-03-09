@@ -6,9 +6,10 @@ import { useState } from "react";
 
 interface MorphingButtonProps {
   onClick: () => void;
+  label?: string;
 }
 
-export function MorphingButton({ onClick }: MorphingButtonProps) {
+export function MorphingButton({ onClick, label = "Skills" }: MorphingButtonProps) {
   const [isHovered, setIsHovered] = useState(false);
 
   return (
@@ -43,7 +44,7 @@ export function MorphingButton({ onClick }: MorphingButtonProps) {
           transition={{ duration: 0.2, delay: isHovered ? 0.1 : 0 }}
           className="text-background text-sm font-medium tracking-wide whitespace-nowrap"
         >
-          Skills
+          {label}
         </motion.span>
       </div>
     </motion.button>

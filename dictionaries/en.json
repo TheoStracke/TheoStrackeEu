@@ -1,0 +1,194 @@
+{
+  "metadata": {
+    "title": "Theo Stracke | Software Developer",
+    "description": "Theo Stracke's Portfolio. Front-End Developer with Full Stack expertise in creating high-performance web solutions."
+  },
+  "navigation": {
+    "sectionsTitle": "Sections",
+    "sections": [
+      { "id": "hero", "label": "Home" },
+      { "id": "about", "label": "About" },
+      { "id": "experience", "label": "Experience" },
+      { "id": "education", "label": "Education" },
+      { "id": "skills", "label": "Skills" },
+      { "id": "projects", "label": "Projects" },
+      { "id": "connect", "label": "Contact" }
+    ]
+  },
+  "languageSwitcher": {
+    "label": "Language",
+    "pt": "PT",
+    "en": "EN"
+  },
+  "hero": {
+    "tagline": "Front-End Engineering & Full Stack Solutions",
+    "title": "THEO STRACKE.",
+    "subtitle": "Front-End Developer specialized in the React and Next.js ecosystem. I build scalable, high-performance interfaces, backed by a solid foundation in Node.js and relational databases.",
+    "cta": "View Projects",
+    "availability": "Available for collaboration",
+    "location": "Palhoça, SC"
+  },
+  "aboutCard": {
+    "description": "I transform complex problems into fast, accessible digital products. My background in enterprise technical support taught me to foresee structural failures before they reach production. My focus is on delivering complete solutions, connecting a robust database architecture to the best possible user experience on the interface.",
+    "points": [
+      "Mastery of the React and Next.js ecosystem",
+      "Scalable architecture and focus on performance"
+    ]
+  },
+  "about": {
+    "title": "About",
+    "eyebrow": "Professional Profile",
+    "description": "My goal is to deliver software that generates real business impact. I don't just write code; I strive to deeply understand product rules to propose technically efficient solutions. My experience in highly demanding corporate environments, combined with my Full Stack work using tools like Node.js, Prisma, and PostgreSQL, allows me to operate confidently across the entire development pipeline. I value clean code, smart componentization, and interfaces designed for high scalability.",
+    "highlights": [
+      "Advanced development with React, Next.js, and TypeScript",
+      "Building RESTful APIs and data modeling",
+      "Critical product vision shaped in enterprise environments"
+    ]
+  },
+  "experience": {
+    "title": "Experience",
+    "eyebrow": "Career Path",
+    "skillButton": "Technologies",
+    "items": [
+      {
+        "company": "Rede Vellum",
+        "period": "Jul/2025 - Present",
+        "role": "Full Stack Developer",
+        "details": "I lead the development and maintenance of web applications essential to operations. I was directly responsible for the conceptualization and implementation of SisCeD, a digital certificate and scheduling management platform that optimized processes and drastically reduced the operational time of the administrative sector. I also work on the frontline of analysis and resolution of technical incidents in production.",
+        "logo": "/images/logos/vellum.png",
+        "skills": [
+          "React",
+          "Node.js",
+          "PostgreSQL",
+          "Express.js",
+          "Prisma",
+          "JWT Authentication"
+        ]
+      },
+      {
+        "company": "Thomson Reuters Brazil",
+        "period": "Feb/2023 - Mar/2025",
+        "role": "Report Support Technician",
+        "details": "Provided specialized technical support to high-level clients resolving incidents in corporate reporting systems. This role honed my analytical ability to track complex data flows, diagnose bottlenecks in production, and collaborate with multidisciplinary teams guided by agile methodologies.",
+        "logo": "/images/logos/thomson-reuters.png",
+        "skills": [
+          "Enterprise Corporate Systems",
+          "Data Flow Analysis",
+          "Agile Methodologies",
+          "Jira",
+          "Incident Resolution"
+        ]
+      },
+      {
+        "company": "Brazilian Army",
+        "period": "Mar/2024 - Jan/2025",
+        "role": "Soldier",
+        "details": "Period of intense development focused on resilience, leadership, and the ability to execute and make decisions under pressure in a highly rigorous technical and disciplinary environment.",
+        "logo": "/images/logos/exercito.png",
+        "skills": [
+          "Execution under Pressure",
+          "Teamwork",
+          "Compliance and Processes",
+          "Conflict Resolution"
+        ]
+      }
+    ]
+  },
+  "education": {
+    "title": "Education",
+    "eyebrow": "Academic",
+    "skillButton": "Study Focus",
+    "items": [
+      {
+        "degree": "Systems Analysis and Development",
+        "institution": "Senac SC",
+        "period": "Feb/2023 - Jul/2026",
+        "type": "Undergraduate Degree",
+        "logo": "/images/logos/senac.png",
+        "skills": [
+          "Software Architecture",
+          "Relational Database Modeling",
+          "Agile Methodologies",
+          "Requirements Engineering"
+        ]
+      },
+      {
+        "degree": "Digital Game Programming",
+        "institution": "Senac SC",
+        "period": "2020 - 2023",
+        "type": "Technical High School",
+        "logo": "/images/logos/senac.png",
+        "skills": [
+          "Advanced Programming Logic",
+          "Object-Oriented Programming",
+          "User Experience (UX)",
+          "Performance Optimization"
+        ]
+      }
+    ]
+  },
+  "skills": {
+    "title": "Skills",
+    "eyebrow": "Tech Stack",
+    "items": [
+      "TypeScript",
+      "React",
+      "Next.js",
+      "Node.js",
+      "Express.js",
+      "Prisma ORM",
+      "PostgreSQL",
+      "Supabase",
+      "Tailwind CSS",
+      "Framer Motion",
+      "Git & CI/CD",
+      "RESTful APIs"
+    ]
+  },
+  "projects": {
+    "title": "Projects",
+    "eyebrow": "Success Cases",
+    "hoverCta": "Explore Project",
+    "visitLabel": "Visit Application",
+    "items": [
+      {
+        "title": "DespaFácil",
+        "description": "Digital dispatch platform designed for scalability and efficiency. It features a multi-flow administrative panel and JWT-based security. The Front-End was built to be highly responsive, consuming a robust REST API managed via Supabase.",
+        "technologies": ["React", "TypeScript", "Vite", "Tailwind CSS", "Shadcn UI", "Supabase"],
+        "href": "https://despa-facil.vercel.app/",
+        "thumbnail": "/images/projects/despafacil-thumb.svg",
+        "logo": "/images/logos/logodespafacil.svg",
+        "gallery": [
+          "/images/projects/despafacil-1.png",
+          "/images/projects/despafacil-2.png",
+          "/images/projects/despafacil-3.png"
+        ]
+      },
+      {
+        "title": "SisCeD",
+        "description": "Scheduling and digital certificate management system developed end-to-end for Rede Vellum. The application modernized internal workflows, ensuring security in data processing and considerably cutting the time required for administrative tasks.",
+        "technologies": ["Next.js", "TypeScript", "Node.js", "Express.js", "Prisma", "PostgreSQL"],
+        "href": "https://sisced.redevellum.com.br",
+        "thumbnail": "/images/projects/sisced-thumb.svg",
+        "logo": "/images/logos/logosisced.svg",
+        "gallery": [
+          "/images/projects/sisced-1.png",
+          "/images/projects/sisced-2.png",
+          "/images/projects/sisced-3.png"
+        ]
+      }
+    ]
+  },
+  "contact": {
+    "title": "Connect",
+    "eyebrow": "Professional Contact",
+    "email": "Email",
+    "linkedin": "LinkedIn",
+    "github": "GitHub",
+    "location": "Palhoça, SC - Brazil"
+  },
+  "overlay": {
+    "subtitle": "Technical Details",
+    "close": "Close"
+  }
+}

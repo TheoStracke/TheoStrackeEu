@@ -4,17 +4,17 @@ import { motion } from "framer-motion";
 import { Menu } from "lucide-react";
 import { useState } from "react";
 
-const sections = [
-  { id: "hero", label: "Início" },
-  { id: "about", label: "Sobre" },
-  { id: "experience", label: "Experiência" },
-  { id: "education", label: "Formação" },
-  { id: "skills", label: "Skills" },
-  { id: "projects", label: "Projetos" },
-  { id: "connect", label: "Contato" },
-];
+interface SideNavSection {
+  id: string;
+  label: string;
+}
 
-export function SideNav() {
+interface SideNavProps {
+  sections: SideNavSection[];
+  title?: string;
+}
+
+export function SideNav({ sections, title = "Sections" }: SideNavProps) {
   const [isOpen, setIsOpen] = useState(false);
 
   const handleClick = (id: string) => {
@@ -57,7 +57,7 @@ export function SideNav() {
         >
           <div className="p-3 border-b border-ink/5">
             <h3 className="font-mono text-[10px] uppercase tracking-wider text-neutral-400">
-              Seções
+              {title}
             </h3>
           </div>
           <nav className="p-2">
