@@ -23,8 +23,8 @@ const FILL_START    = 1.15;
 const FILL_DUR      = 0.30;
 const STROKE_FADE   = FILL_START + FILL_DUR - 0.05;
 const DOT_START     = 1.50;
-const EXIT_START_MS = 2350;
-const EXIT_DUR      = 0.65;
+const EXIT_START_MS = 2450;
+const EXIT_DUR      = 0.85;
 
 export function LoadingScreen() {
   const [exiting, setExiting] = useState(false);
