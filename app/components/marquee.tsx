@@ -34,11 +34,8 @@ export function Marquee({
   gradientWidth = "100px",
   gradientColor = "hsl(var(--background))",
 }: MarqueeProps) {
-  // Calculate how many times to repeat items for seamless loop
-  // More items = fewer repetitions needed
   const repeatCount = repeat ?? (items.length < 5 ? 4 : items.length < 10 ? 3 : 2);
   
-  // Duplicate items for seamless infinite scroll
   const duplicatedItems = useMemo(() => {
     const allItems = [];
     for (let i = 0; i < repeatCount; i++) {
@@ -47,18 +44,18 @@ export function Marquee({
     return allItems;
   }, [items, repeatCount]);
 
-  // Calculate animation duration based on speed
-  // Slower speed = longer duration
   const itemCount = duplicatedItems.length;
-  const avgItemWidth = 150; // Approximate average item width in pixels
+  const avgItemWidth = 150;
   const totalWidth = itemCount * avgItemWidth;
-  const duration = totalWidth / speed; // seconds
+  const duration = totalWidth / speed; 
 
-  // CSS custom properties for dynamic control
   const marqueeStyles: CSSProperties = {
     "--marquee-duration": `${duration}s`,
     "--marquee-direction": direction === "left" ? "normal" : "reverse",
   } as CSSProperties;
+
+  // Nome único para evitar conflito com o Tailwind
+  const animationName = `marquee-horizontal-${repeatCount}`;
 
   return (
     <div
@@ -68,7 +65,6 @@ export function Marquee({
       )}
       style={marqueeStyles}
     >
-      {/* Fade gradient overlays */}
       <div
         className="pointer-events-none absolute inset-y-0 left-0 z-10"
         style={{
@@ -84,14 +80,13 @@ export function Marquee({
         }}
       />
 
-      {/* Marquee track */}
       <div
         className={clsx(
           "flex whitespace-nowrap",
           pauseOnHover && "group-hover:[animation-play-state:paused]"
         )}
         style={{
-          animation: `marquee var(--marquee-duration) linear infinite`,
+          animation: `${animationName} var(--marquee-duration) linear infinite`,
           animationDirection: "var(--marquee-direction)",
         }}
       >
@@ -109,15 +104,11 @@ export function Marquee({
         ))}
       </div>
 
-      {/* Keyframe animation defined inline for dynamic duration */}
-      <style jsx>{`
-        @keyframes marquee {
-          0% {
-            transform: translateX(0%);
-          }
-          100% {
-            transform: translateX(-${100 / repeatCount}%);
-          }
+      {/* Tag de estilo padrão, injetando o keyframe dinâmico */}
+      <style>{`
+        @keyframes ${animationName} {
+          0% { transform: translateX(0%); }
+          100% { transform: translateX(-${100 / repeatCount}%); }
         }
       `}</style>
     </div>
@@ -163,6 +154,8 @@ export function VerticalMarquee({
     "--marquee-direction": direction === "up" ? "normal" : "reverse",
   } as CSSProperties;
 
+  const animationName = `marquee-vertical-${repeatCount}`;
+
   return (
     <div
       className={clsx(
@@ -171,7 +164,6 @@ export function VerticalMarquee({
       )}
       style={marqueeStyles}
     >
-      {/* Fade gradient overlays */}
       <div
         className="pointer-events-none absolute inset-x-0 top-0 z-10"
         style={{
@@ -187,14 +179,13 @@ export function VerticalMarquee({
         }}
       />
 
-      {/* Marquee track */}
       <div
         className={clsx(
           "flex flex-col",
           pauseOnHover && "group-hover:[animation-play-state:paused]"
         )}
         style={{
-          animation: `marquee-vertical var(--marquee-duration) linear infinite`,
+          animation: `${animationName} var(--marquee-duration) linear infinite`,
           animationDirection: "var(--marquee-direction)",
         }}
       >
@@ -212,14 +203,10 @@ export function VerticalMarquee({
         ))}
       </div>
 
-      <style jsx>{`
-        @keyframes marquee-vertical {
-          0% {
-            transform: translateY(0%);
-          }
-          100% {
-            transform: translateY(-${100 / repeatCount}%);
-          }
+      <style>{`
+        @keyframes ${animationName} {
+          0% { transform: translateY(0%); }
+          100% { transform: translateY(-${100 / repeatCount}%); }
         }
       `}</style>
     </div>

@@ -8,13 +8,14 @@ import type { Dictionary } from "@/types/dictionary";
 import type { Locale } from "@/lib/i18n";
 import { LanguageSwitcher } from "./language-switcher";
 import { InteractiveButton } from "./interactive-button";
-import { Marquee } from "./marquee";
+import { SkillsSection } from "./skills-section";
 import { MorphingButton } from "./morphing-button";
 import { NeuralOverlay } from "./neural-overlay";
-import { ProjectCard } from "./project-card";
-import { Reveal } from "./reveal";
+import { Reveal, RevealLetters, RevealWords } from "./reveal";
 import { SectionHeading } from "./section-heading";
 import { SideNav } from "./side-nav";
+import { ProjectsSection } from "./projects-section";
+import { scrollTo } from "./lenis-provider";
 
 interface ActiveExperience {
   type: "experience" | "education";
@@ -57,7 +58,7 @@ export function HomePage({ lang, dictionary }: HomePageProps) {
   );
 
   return (
-    <main className="bg-background text-ink">
+    <main className="bg-background text-ink overflow-hidden">
       <SideNav sections={dictionary.navigation.sections} title={dictionary.navigation.sectionsTitle} />
       <NeuralOverlay
         skills={activeModal?.skills || []}
@@ -74,40 +75,39 @@ export function HomePage({ lang, dictionary }: HomePageProps) {
       />
 
       <div className="mx-auto flex min-h-screen max-w-6xl flex-col gap-20 px-6 pb-24 pt-16 md:px-12 lg:px-20">
-        <header className="flex items-center justify-between text-xs uppercase tracking-wider text-neutral-500">
+        {/* ── Header ── */}
+        <header className="flex items-center justify-between text-xs uppercase tracking-wider text-neutral-500 z-50">
           <Image src="/images/logos/ts.svg" alt="TS Logo" width={40} height={40} className="h-10 w-auto" />
           <LanguageSwitcher currentLocale={lang} labels={dictionary.languageSwitcher} />
-            <span className="hidden items-center gap-2 font-mono text-[13px] md:flex">
-              <MapPin size={14} /> {dictionary.hero.location}
-            </span>
-       
+          <span className="hidden items-center gap-2 font-mono text-[13px] md:flex">
+            <MapPin size={14} /> {dictionary.hero.location}
+          </span>
         </header>
 
+        {/* ── Hero ── */}
         <section id="hero" className="relative grid min-h-[70vh] grid-cols-1 items-center gap-12 lg:grid-cols-[1fr_320px]">
           <div className="space-y-8">
             <Reveal>
               <p className="font-mono text-[12px] uppercase tracking-wider text-neutral-500">{dictionary.hero.tagline}</p>
             </Reveal>
             <div className="space-y-6">
-              <motion.h1
-                initial={{ opacity: 0, y: 40 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 1, ease: [0.2, 0.8, 0.2, 1] }}
-                className="font-display text-5xl leading-[0.9] tracking-[-0.02em] font-bold sm:text-6xl md:text-7xl lg:text-8xl"
-              >
-                {dictionary.hero.title}
-              </motion.h1>
-              <Reveal>
-                <p className="max-w-2xl text-lg leading-relaxed text-neutral-700 md:text-xl">{dictionary.hero.subtitle}</p>
-              </Reveal>
+              <RevealLetters
+                text={dictionary.hero.title}
+                className="font-display text-5xl leading-[0.9] tracking-[-0.02em] font-bold sm:text-6xl md:text-7xl lg:text-8xl text-ink"
+                delay={0.1}
+                stagger={0.04}
+              />
+              <RevealWords
+                text={dictionary.hero.subtitle}
+                className="max-w-2xl text-lg leading-relaxed text-neutral-700 md:text-xl"
+                delay={0.6}
+                stagger={0.03}
+              />
             </div>
             <div className="flex flex-wrap items-center gap-6">
               <InteractiveButton
                 onClick={() => {
-                  const element = document.getElementById("projects");
-                  if (element) {
-                    element.scrollIntoView({ behavior: "smooth" });
-                  }
+                  scrollTo("#projects", { duration: 1.2 });
                 }}
               >
                 {dictionary.hero.cta}
@@ -124,7 +124,7 @@ export function HomePage({ lang, dictionary }: HomePageProps) {
             </div>
           </div>
 
-          <div id="about" className="relative flex flex-col gap-6 rounded-3xl border border-ink/10 bg-white/60 p-8 shadow-glow">
+          <div id="about-card" className="relative flex flex-col gap-6 rounded-3xl border border-ink/10 bg-white/60 p-8 shadow-glow">
             <Reveal>
               <p className="text-sm leading-relaxed text-neutral-700">{dictionary.aboutCard.description}</p>
             </Reveal>
@@ -138,7 +138,8 @@ export function HomePage({ lang, dictionary }: HomePageProps) {
           </div>
         </section>
 
-        <section id="about" className="space-y-10">
+        {/* ── About ── */}
+        <section id="about" className="space-y-10 relative z-10">
           <SectionHeading label={dictionary.about.title} eyebrow={dictionary.about.eyebrow} />
           <div className="grid gap-8 md:grid-cols-2 md:items-start">
             <Reveal>
@@ -156,7 +157,8 @@ export function HomePage({ lang, dictionary }: HomePageProps) {
           </div>
         </section>
 
-        <section id="experience" className="space-y-10">
+        {/* ── Timeline ── */}
+        <section id="experience" className="space-y-10 relative z-10">
           <SectionHeading label={dictionary.experience.title} eyebrow={dictionary.experience.eyebrow} />
           <div>
             {experiences.map((exp) => (
@@ -183,14 +185,15 @@ export function HomePage({ lang, dictionary }: HomePageProps) {
           </div>
         </section>
 
-        <section id="education" className="space-y-10">
+        {/* ── Education ── */}
+        <section id="education" className="space-y-10 relative z-10">
           <SectionHeading label={dictionary.education.title} eyebrow={dictionary.education.eyebrow} />
           <div>
             {education.map((edu) => (
               <Reveal key={edu.degree} className="relative w-full py-12 border-b border-neutral-200">
                 <div className="w-full pr-32 space-y-3">
                   <p className="text-xs uppercase tracking-[0.22em] text-neutral-500">{edu.period}</p>
-                  <div className="space-y-1 flex items-start justify-between">
+                   <div className="space-y-1 flex items-start justify-between">
                     <div>
                       <p className="font-display text-2xl md:text-3xl">{edu.institution}</p>
                       <p className="text-sm uppercase tracking-[0.18em] text-neutral-600">{edu.type}</p>
@@ -210,33 +213,18 @@ export function HomePage({ lang, dictionary }: HomePageProps) {
           </div>
         </section>
 
-        <section id="skills" className="space-y-6">
-          <SectionHeading label={dictionary.skills.title} eyebrow={dictionary.skills.eyebrow} />
-          <Marquee items={skills} />
-        </section>
+        {/* ── Skills ── */}
+        <div className="relative z-10">
+          <SkillsSection skills={skills} dictionary={dictionary} />
+        </div>
 
-        <section id="projects" className="space-y-10">
-          <SectionHeading label={dictionary.projects.title} eyebrow={dictionary.projects.eyebrow} />
-          <div className="grid items-stretch gap-8 md:gap-10 lg:grid-cols-2 p-1">
-            {projects.map((project, index) => (
-              <Reveal key={project.title} delay={index * 0.15}>
-                <ProjectCard
-                  title={project.title}
-                  description={project.description}
-                  technologies={project.technologies}
-                  href={project.href}
-                  thumbnail={project.thumbnail}
-                  logo={project.logo}
-                  gallery={project.gallery}
-                  hoverCtaText={dictionary.projects.hoverCta}
-                  visitLabel={dictionary.projects.visitLabel}
-                />
-              </Reveal>
-            ))}
-          </div>
-        </section>
+        {/* ── Projects ── */}
+        <div className="relative z-10">
+          <ProjectsSection projects={projects} dictionary={dictionary} />
+        </div>
 
-        <footer id="connect" className="space-y-8 rounded-3xl border border-ink/10 bg-white/60 p-10 shadow-card">
+        {/* ── Footer / Contact ── */}
+        <footer id="connect" className="space-y-8 rounded-3xl border border-ink/10 bg-white/60 p-10 shadow-card relative z-10">
           <SectionHeading label={dictionary.contact.title} eyebrow={dictionary.contact.eyebrow} />
           <div className="flex flex-wrap items-center gap-4 text-sm uppercase tracking-[0.18em] text-neutral-600">
             {socials.map((item) => (

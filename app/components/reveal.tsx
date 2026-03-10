@@ -175,7 +175,8 @@ export function RevealLetters({
   className,
   letterClassName,
 }: RevealLettersProps) {
-  const letters = text.split("");
+  // Agora a gente separa por palavras primeiro
+  const words = text.split(" ");
 
   const containerVariants: Variants = {
     hidden: {},
@@ -212,18 +213,24 @@ export function RevealLetters({
       viewport={{ once: true, margin: "-10%" }}
       className={clsx("inline-flex flex-wrap overflow-hidden", className)}
     >
-      {letters.map((letter, index) => (
-        <motion.span
-          key={`${letter}-${index}`}
-          variants={letterVariants}
-          className={clsx(
-            "inline-block will-change-transform",
-            letter === " " && "w-[0.3em]",
-            letterClassName
-          )}
+      {words.map((word, wordIndex) => (
+        <span 
+          key={`word-${wordIndex}`} 
+          className="inline-block whitespace-nowrap mr-[0.3em] last:mr-0"
         >
-          {letter === " " ? "\u00A0" : letter}
-        </motion.span>
+          {word.split("").map((letter, letterIndex) => (
+            <motion.span
+              key={`${letter}-${letterIndex}`}
+              variants={letterVariants}
+              className={clsx(
+                "inline-block will-change-transform",
+                letterClassName
+              )}
+            >
+              {letter}
+            </motion.span>
+          ))}
+        </span>
       ))}
     </motion.span>
   );

@@ -62,3 +62,11 @@ a {
 ::-webkit-scrollbar-track {
   background: transparent;
 }
+
+/* Esconde o cursor customizado em dispositivos com tela de toque antes do JS carregar */
+@media (pointer: coarse) {
+  #custom-cursor, 
+  .custom-cursor-container {
+    display: none !important;
+  }
+}

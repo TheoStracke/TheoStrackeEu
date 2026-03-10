@@ -3,6 +3,7 @@
 import { motion } from "framer-motion";
 import { Menu } from "lucide-react";
 import { useState } from "react";
+import { scrollTo } from "./lenis-provider"; // <-- Importamos o maestro aqui!
 
 interface SideNavSection {
   id: string;
@@ -18,10 +19,8 @@ export function SideNav({ sections, title = "Sections" }: SideNavProps) {
   const [isOpen, setIsOpen] = useState(false);
 
   const handleClick = (id: string) => {
-    const element = document.getElementById(id);
-    if (element) {
-      element.scrollIntoView({ behavior: "smooth" });
-    }
+    // Agora sim! O Lenis toma conta da peleia com um deslize macio de 1.2s
+    scrollTo(`#${id}`, { duration: 1.2 });
     setIsOpen(false);
   };
 
