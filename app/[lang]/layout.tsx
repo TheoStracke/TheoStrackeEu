@@ -101,16 +101,12 @@ export default function LangLayout({ children, params }: LangLayoutProps) {
 
   return (
     <>
-      {/* Injeta o script do JSON-LD na cabeça do HTML */}
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
-
       <LoadingScreen />
-      <PageTransition>
-        {children}
-      </PageTransition>
+      <PageTransition lang={params.lang}>{children}</PageTransition>
     </>
   );
 }

@@ -1,8 +1,17 @@
 "use client";
 
-import { motion, AnimatePresence, type Variants } from "framer-motion";
+import {
+  motion,
+  AnimatePresence,
+  type Variants,
+  useMotionValue,
+  useAnimationFrame,
+  useTransform,
+  MotionValue
+} from "framer-motion";
 import { X } from "lucide-react";
-import { useEffect, useState, useCallback, useMemo, useRef } from "react";
+import { useEffect, useState, useCallback, useMemo } from "react";
+import { createPortal } from "react-dom";
 import { stopScroll, startScroll } from "./lenis-provider";
 
 // ═══════════════════════════════════════════════════════════════════════════
@@ -114,14 +123,14 @@ function OrbitRing({ radius, orbitIndex, isHovered }: OrbitRingProps) {
 
 interface SkillPillProps {
   skill: string;
-  ringRotation: number;
+  ringRotation: MotionValue<number>;
   onHoverStart: () => void;
   onHoverEnd: () => void;
 }
 
 function SkillPill({ skill, ringRotation, onHoverStart, onHoverEnd }: SkillPillProps) {
-  // CORREÇÃO: Apenas invertemos a rotação do anel pai para manter o texto 100% alinhado na horizontal
-  const counterRotate = -ringRotation;
+  // O MÁGICO CONTRA-GIRO PELA GPU: Inverte a rotação sem re-render do React
+  const counterRotate = useTransform(ringRotation, (r) => -r);
 
   return (
     <motion.div
@@ -169,39 +178,20 @@ interface OrbitLayerProps {
 }
 
 function OrbitLayer({ skills, radius, orbitIndex, direction, duration }: OrbitLayerProps) {
-  const [rotation, setRotation] = useState(0);
+  // Rotação na Placa de Vídeo.
+  const rotation = useMotionValue(0);
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
-  const rafRef = useRef<number>(0);
-  const lastTimeRef = useRef<number | null>(null);
-  const rotationRef = useRef(0);
-  const pausedRef = useRef(false);
 
-  useEffect(() => {
-    const degreesPerMs = (360 / (duration * 1000)) * direction;
-
-    const tick = (time: number) => {
-      if (lastTimeRef.current !== null) {
-        const delta = time - lastTimeRef.current;
-        if (!pausedRef.current) {
-          rotationRef.current = (rotationRef.current + degreesPerMs * delta) % 360;
-          setRotation(rotationRef.current);
-        }
-      }
-      lastTimeRef.current = time;
-      rafRef.current = requestAnimationFrame(tick);
-    };
-
-    rafRef.current = requestAnimationFrame(tick);
-    return () => cancelAnimationFrame(rafRef.current);
-  }, [duration, direction]);
-
-  useEffect(() => {
-    pausedRef.current = hoveredIndex !== null;
-  }, [hoveredIndex]);
+  useAnimationFrame((time, delta) => {
+    if (hoveredIndex === null) {
+      const degreesPerMs = (360 / (duration * 1000)) * direction;
+      rotation.set(rotation.get() + degreesPerMs * delta);
+    }
+  });
 
   const nodeAngles = useMemo(
     () => skills.map((_, i) => (360 / skills.length) * i),
-    [skills.length]
+    [skills]
   );
 
   if (!skills.length) return null;
@@ -213,20 +203,19 @@ function OrbitLayer({ skills, radius, orbitIndex, direction, duration }: OrbitLa
     >
       {skills.map((skill, i) => {
         const angleRad = (nodeAngles[i] * Math.PI) / 180;
-        const x = radius * Math.cos(angleRad);
-        const y = radius * Math.sin(angleRad);
+        const xOffset = radius * Math.cos(angleRad);
+        const yOffset = radius * Math.sin(angleRad);
 
         return (
           <motion.div
             key={skill}
             className="absolute pointer-events-auto"
             style={{
-              left: "50%",
-              top: "50%",
-              x: x,
-              y: y,
-              translateX: "-50%",
-              translateY: "-50%",
+              // CORREÇÃO: Fixa perfeitamente na linha.
+              left: `calc(50% + ${xOffset}px)`,
+              top: `calc(50% + ${yOffset}px)`,
+              x: "-50%",
+              y: "-50%",
             }}
             initial={{ opacity: 0, scale: 0.4 }}
             animate={{ opacity: 1, scale: 1 }}
@@ -375,13 +364,17 @@ export function NeuralOverlay({
   const [isMobile, setIsMobile] = useState(false);
   const [hoveredOrbit, setHoveredOrbit] = useState<number | null>(null);
 
- useEffect(() => {
-    // Trocamos window.innerWidth pelo clientWidth para ignorar a barra de rolagem
+  // Controle de Montagem para o Portal do Next.js
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => setMounted(true), []);
+
+  useEffect(() => {
+    if (!mounted) return;
     const check = () => setIsMobile(document.documentElement.clientWidth < 768);
     check();
     window.addEventListener("resize", check);
     return () => window.removeEventListener("resize", check);
-  }, []);
+  }, [mounted]);
 
   const [orbit0Skills, orbit1Skills, orbit2Skills] = useMemo(
     () => distributeSkills(skills),
@@ -417,28 +410,24 @@ export function NeuralOverlay({
 
   useEffect(() => {
     if (!isOpen) return;
-    const currentScrollY = window.scrollY;
     stopScroll();
     document.body.style.overflow = "hidden";
-    document.body.style.position = "fixed";
-    document.body.style.width = "100%";
-    document.body.style.top = `-${currentScrollY}px`;
+    
     return () => {
       document.body.style.overflow = "";
-      document.body.style.position = "";
-      document.body.style.width = "";
-      document.body.style.top = "";
-      window.scrollTo(0, currentScrollY);
       startScroll();
     };
   }, [isOpen]);
 
-  return (
+  if (!mounted) return null;
+
+  // ── O PORTAL: Foge das amarras do layout pai direto para a raiz do documento ──
+  return createPortal(
     <AnimatePresence mode="wait">
       {isOpen && (
         <motion.div
           key="quantum-overlay"
-          className="fixed inset-0 z-50 flex items-center justify-center overflow-hidden"
+          className="fixed inset-0 z-[99999] flex items-center justify-center overflow-hidden"
           variants={overlayVariants}
           initial="hidden"
           animate="visible"
@@ -474,7 +463,7 @@ export function NeuralOverlay({
           <HudCorner position="br" />
 
           <motion.div
-            className="absolute top-6 left-6 md:top-10 md:left-10 z-50"
+            className="absolute top-6 left-6 md:top-10 md:left-10 z-[100000]"
             initial={{ opacity: 0, x: -20 }}
             animate={{ opacity: 1, x: 0 }}
             exit={{ opacity: 0, x: -20 }}
@@ -495,7 +484,7 @@ export function NeuralOverlay({
           </motion.div>
 
           <motion.div
-            className="absolute bottom-6 left-6 md:bottom-10 md:left-10 z-50 font-mono"
+            className="absolute bottom-6 left-6 md:bottom-10 md:left-10 z-[100000] font-mono"
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0 }}
@@ -508,7 +497,7 @@ export function NeuralOverlay({
 
           <motion.button
             onClick={onClose}
-            className="absolute top-5 right-5 md:top-8 md:right-8 z-50 p-2.5 md:p-3 rounded-full bg-white/8 border border-white/20 text-white hover:bg-white/18 hover:border-white/40 transition-all focus:outline-none focus:ring-2 focus:ring-white/40 focus:ring-offset-2 focus:ring-offset-black/50"
+            className="absolute top-5 right-5 md:top-8 md:right-8 z-[100000] p-2.5 md:p-3 rounded-full bg-white/8 border border-white/20 text-white hover:bg-white/18 hover:border-white/40 transition-all focus:outline-none focus:ring-2 focus:ring-white/40 focus:ring-offset-2 focus:ring-offset-black/50"
             initial={{ opacity: 0, scale: 0.7 }}
             animate={{ opacity: 1, scale: 1 }}
             exit={{ opacity: 0, scale: 0.7 }}
@@ -554,6 +543,7 @@ export function NeuralOverlay({
           </div>
         </motion.div>
       )}
-    </AnimatePresence>
+    </AnimatePresence>,
+    document.body
   );
 }

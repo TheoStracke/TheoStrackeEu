@@ -41,7 +41,9 @@ export function LanguageSwitcher({ currentLocale, labels }: LanguageSwitcherProp
       : `/${nextLocale}`;
     const query = searchParams.toString();
     const hash = typeof window !== "undefined" ? window.location.hash : "";
-    router.push(`${base}${query ? `?${query}` : ""}${hash}` as Parameters<typeof router.push>[0]);
+    const target = `${base}${query ? `?${query}` : ""}${hash}`;
+    console.log(`[LanguageSwitcher] Language clicked: ${currentLocale} → ${nextLocale} | navigating to: ${target}`);
+    router.push(target as Parameters<typeof router.push>[0]);
   };
 
   return (
