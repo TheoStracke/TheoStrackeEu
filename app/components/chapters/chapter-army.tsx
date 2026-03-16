@@ -162,6 +162,20 @@ export const ChapterArmy: React.FC<ChapterArmyProps> = ({ dict, onComplete, onSk
     >
       <div ref={mountRef} className="absolute inset-0" />
 
+      {/* HUD: Crosshair Nativa Fixa (Garante alinhamento perfeito com Raycaster 0,0) */}
+      {uiState.hasStarted && (
+        <div className="pointer-events-none absolute inset-0 z-20 flex items-center justify-center">
+          <div className="relative h-6 w-6 opacity-80">
+            <div className="absolute left-1/2 top-0 h-[40%] w-[2px] -translate-x-1/2 bg-[#C8FF00]" />
+            <div className="absolute left-1/2 bottom-0 h-[40%] w-[2px] -translate-x-1/2 bg-[#C8FF00]" />
+            <div className="absolute left-0 top-1/2 h-[2px] w-[40%] -translate-y-1/2 bg-[#C8FF00]" />
+            <div className="absolute right-0 top-1/2 h-[2px] w-[40%] -translate-y-1/2 bg-[#C8FF00]" />
+            {/* Ponto central */}
+            <div className="absolute left-1/2 top-1/2 h-1.5 w-1.5 -translate-x-1/2 -translate-y-1/2 rounded-full bg-[#C8FF00]" />
+          </div>
+        </div>
+      )}
+
       {/* TELA DE TUTORIAL / INÍCIO */}
       {!uiState.hasStarted && showTutorial && (
         <div className="absolute inset-0 z-[100] flex items-center justify-center bg-black/95 p-6 backdrop-blur-sm">

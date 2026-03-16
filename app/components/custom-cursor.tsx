@@ -6,8 +6,7 @@ import { useEffect, useRef } from "react";
 const POSITION_SPRING = { damping: 28, stiffness: 280, mass: 0.5 };
 const SCALE_SPRING    = { damping: 22, stiffness: 380, mass: 0.3 };
 
-// Adicionamos o estado "crosshair"
-type CursorState = "default" | "interactive" | "reading" | "crosshair";
+type CursorState = "default" | "interactive" | "reading" | "hidden";
 
 export function CustomCursor() {
   const stateRef = useRef<CursorState>("default");
@@ -36,9 +35,8 @@ export function CustomCursor() {
       case "reading":
         dotScaleRaw.set(1); ringScaleRaw.set(0.7); ringOpacRaw.set(0.45); ringBgRaw.set(0);
         break;
-      case "crosshair":
-        // Estilo de mira FPS: pontinho minúsculo, anel bem reduzido e verde
-        dotScaleRaw.set(0.3); ringScaleRaw.set(0.6); ringOpacRaw.set(0.8); ringBgRaw.set(0);
+      case "hidden":
+        dotScaleRaw.set(0); ringScaleRaw.set(1); ringOpacRaw.set(0); ringBgRaw.set(0);
         break;
       default:
         dotScaleRaw.set(1); ringScaleRaw.set(1); ringOpacRaw.set(1); ringBgRaw.set(0);
@@ -49,11 +47,7 @@ export function CustomCursor() {
     if (window.matchMedia("(max-width: 768px)").matches) return;
 
     const onMove = (e: MouseEvent) => {
-      // Se estiver no modo PointerLock (FPS), força o cursor pro meio da tela
       if (document.pointerLockElement) {
-        mouseX.set(window.innerWidth / 2);
-        mouseY.set(window.innerHeight / 2);
-        if (stateRef.current !== "crosshair") applyState("crosshair");
         return;
       }
 
@@ -74,35 +68,39 @@ export function CustomCursor() {
     };
 
     const onDown = () => {
-      if (stateRef.current === "crosshair") {
-        ringScaleRaw.set(0.4); // Recuo da arma/mira ao clicar
-      } else {
-        ringScaleRaw.set(stateRef.current === "interactive" ? 1.1 : 0.82);
-      }
+      if (stateRef.current === "hidden") return;
+
+      ringScaleRaw.set(stateRef.current === "interactive" ? 1.1 : 0.82);
       dotScaleRaw.set(0.35);
     };
 
-    const onUp = () => applyState(stateRef.current);
-
-    // Adiciona listener pro PointerLock avisar quando saiu do jogo
-    const onPointerLockChange = () => {
-      if (!document.pointerLockElement) applyState("default");
+    const onUp = () => {
+      if (stateRef.current === "hidden") return;
+      applyState(stateRef.current);
     };
 
-    window.addEventListener("mousemove", onMove, { passive: true });
+    const onPointerLockChange = () => {
+      if (document.pointerLockElement) {
+        applyState("hidden");
+      } else {
+        applyState("default");
+      }
+    };
+
+    document.addEventListener("mousemove", onMove, { passive: true });
     window.addEventListener("mouseover", onOver, { passive: true });
     window.addEventListener("mousedown", onDown, { passive: true });
     window.addEventListener("mouseup", onUp, { passive: true });
     document.addEventListener("pointerlockchange", onPointerLockChange);
 
     return () => {
-      window.removeEventListener("mousemove", onMove);
+      document.removeEventListener("mousemove", onMove);
       window.removeEventListener("mouseover", onOver);
       window.removeEventListener("mousedown", onDown);
       window.removeEventListener("mouseup", onUp);
       document.removeEventListener("pointerlockchange", onPointerLockChange);
     };
-  }, []);
+  }, [mouseX, mouseY]);
 
   return (
     <>
@@ -116,9 +114,8 @@ export function CustomCursor() {
         style={{
           x: mouseX, y: mouseY, translateX: "-50%", translateY: "-50%",
           scale: dotScale,
-          // Se for crosshair, fica verde neon
-          backgroundColor: stateRef.current === "crosshair" ? "#C8FF00" : "white",
-          mixBlendMode: stateRef.current === "crosshair" ? "normal" : "difference",
+          backgroundColor: "white",
+          mixBlendMode: "difference",
         }}
       />
 
@@ -127,9 +124,8 @@ export function CustomCursor() {
         style={{
           x: ringX, y: ringY, translateX: "-50%", translateY: "-50%",
           scale: ringScale, opacity: ringOpac, backgroundColor: ringBg,
-          // Se for crosshair, borda verde neon
-          borderColor: stateRef.current === "crosshair" ? "#C8FF00" : "white",
-          mixBlendMode: stateRef.current === "crosshair" ? "normal" : "difference",
+          borderColor: "white",
+          mixBlendMode: "difference",
         }}
       />
     </>

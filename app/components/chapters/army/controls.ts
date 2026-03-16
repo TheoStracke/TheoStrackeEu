@@ -26,8 +26,6 @@ export const setupControls = (
   container: HTMLElement,
   onShoot: () => void
 ) => {
-  const canvas = container.querySelector("canvas");
-
   if (!isMobileMode) {
     onMouseMoveHandler = (e: MouseEvent) => {
       if (!state.isPointerLocked) return;
@@ -46,7 +44,7 @@ export const setupControls = (
     };
 
     onMouseDownHandler = (_e: MouseEvent) => {
-      if (document.pointerLockElement === container || document.pointerLockElement === canvas) {
+      if (document.pointerLockElement) {
         onShoot();
       }
     };

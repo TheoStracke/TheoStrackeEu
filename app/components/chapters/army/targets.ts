@@ -7,7 +7,7 @@ export const setupTargets = (state: ThreeState, dict: any, positions: { x: numbe
   const targetTexts = [dict.target1, dict.target2, dict.target3];
 
   // Geometria de Alvo: Disco maior e fixo
-  state.geometries.targetDisc = new THREE.CylinderGeometry(1.2, 1.2, 0.05, 32);
+  state.geometries.targetDisc = new THREE.CylinderGeometry(1.5, 1.5, 0.05, 32);
   
   positions.forEach((pos, i) => {
     const group = new THREE.Group() as TargetGroup;
@@ -63,7 +63,9 @@ export const checkTargets = (
   onAllFound: () => void
 ) => {
   // (0,0) representa o centro exato da tela no espaço NDC do Three.js.
-  state.raycaster.setFromCamera(new THREE.Vector2(0, 0), state.camera);
+  const centerOfScreen = new THREE.Vector2(0, 0);
+
+  state.raycaster.setFromCamera(centerOfScreen, state.camera);
   state.raycaster.far = 40;
 
   const activeTargets = state.targets.filter((target) => !target.userData.isFound);
