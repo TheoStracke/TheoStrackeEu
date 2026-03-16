@@ -1,431 +1,223 @@
 "use client";
 
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState, useCallback } from "react";
 import { gsap } from "@/lib/gsap";
 import { pauseForChapter, resumeFromChapter } from "../lenis-provider";
-import type { ArmyGameState, ChapterArmyProps, TargetNode } from "@/types/chapter-army";
+import type { ChapterArmyProps } from "@/types/chapter-army";
 
-const INITIAL_TARGETS: TargetNode[] = [
-  { id: "target1", x: 0.22, y: 0.34, radius: 0.08, isFound: false },
-  { id: "target2", x: 0.56, y: 0.62, radius: 0.08, isFound: false },
-  { id: "target3", x: 0.82, y: 0.28, radius: 0.08, isFound: false },
+import type { ThreeState } from "./army/types";
+import { initScene, destroyScene, renderScene, updateSceneElements } from "./army/scene";
+import { setupTargets, updateTargets, checkTargets } from "./army/targets";
+import { setupControls, cleanupControls } from "./army/controls";
+
+const TARGET_POSITIONS = [
+  { x: -4,  z: -10 }, // Perto, à esquerda
+  { x: 8,   z: -15 }, // Médio, à direita
+  { x: -2,  z: -22 }, // Fundo, centralizado
 ];
 
-export const ChapterArmy: React.FC<ChapterArmyProps> = ({
-  dict,
-  isActive,
-  onComplete,
-  onSkip,
-}) => {
-  const canvasRef = useRef<HTMLCanvasElement>(null);
+export const ChapterArmy: React.FC<ChapterArmyProps> = ({ dict, onComplete, onSkip }) => {
+  // ── REFERÊNCIAS ──
+  const mountRef = useRef<HTMLDivElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   const audioRef = useRef<HTMLAudioElement>(null);
-  const requestRef = useRef<number | null>(null);
+  const threeRef = useRef<ThreeState | null>(null);
   const completionTimeoutRef = useRef<number | null>(null);
-  const completionTriggeredRef = useRef(false);
-  const exitInProgressRef = useRef(false);
-  const mobileHintRef = useRef<HTMLDivElement>(null);
+  const completionTriggered = useRef(false);
+  const exitInProgress = useRef(false);
 
-  const gameState = useRef<ArmyGameState>({
-    mouseX: 0,
-    mouseY: 0,
-    width: 0,
-    height: 0,
-    isMobile: false,
-    isPointerLocked: false,
-    isDirty: true,
-    targetsFound: 0,
-    targets: INITIAL_TARGETS.map((target) => ({ ...target })),
-  });
-
-  const [uiState, setUiState] = useState<{
-    hasStarted: boolean;
-    visibleText: string | null;
-  }>({
+  // ── ESTADOS ──
+  const [uiState, setUiState] = useState({
     hasStarted: false,
-    visibleText: dict.intro,
+    visibleText: dict.intro as string | null,
+    targetsFound: 0,
   });
+  const [showTutorial, setShowTutorial] = useState(true);
   const [isMuted, setIsMuted] = useState(false);
   const [isMobileMode, setIsMobileMode] = useState(false);
-  const [showMobileHint, setShowMobileHint] = useState(false);
 
-  useEffect(() => {
-    if (!showMobileHint || !mobileHintRef.current) return;
+  // ── 1. GESTÃO DE SAÍDA E CLEANUP ───────────────────────────────────────────
+  const handleExit = useCallback((cb: () => void) => {
+    if (exitInProgress.current) return;
+    exitInProgress.current = true;
 
-    gsap.set(mobileHintRef.current, { opacity: 1 });
-    const fadeTween = gsap.to(mobileHintRef.current, {
-      opacity: 0,
-      duration: 0.9,
-      delay: 3,
-      ease: "power2.out",
-      onComplete: () => setShowMobileHint(false),
-    });
-
-    return () => {
-      fadeTween.kill();
-    };
-  }, [showMobileHint]);
-
-  const handleExit = (callback: () => void) => {
-    if (exitInProgressRef.current) return;
-    exitInProgressRef.current = true;
+    if (threeRef.current?.animFrameId) {
+      cancelAnimationFrame(threeRef.current.animFrameId);
+    }
 
     if (completionTimeoutRef.current !== null) {
       window.clearTimeout(completionTimeoutRef.current);
       completionTimeoutRef.current = null;
     }
 
-    if (document.pointerLockElement === canvasRef.current) {
-      document.exitPointerLock();
-    }
-
+    if (document.pointerLockElement) document.exitPointerLock();
     resumeFromChapter("army");
 
-    if (audioRef.current) {
+    const performCleanup = () => {
+      if (threeRef.current) {
+        destroyScene(threeRef.current, mountRef.current);
+        threeRef.current = null;
+      }
+      cleanupControls();
+      exitInProgress.current = false;
+      cb();
+    };
+
+    if (audioRef.current && !audioRef.current.paused) {
       gsap.to(audioRef.current, {
         volume: 0,
-        duration: 1.5,
-        ease: "power2.inOut",
+        duration: 1.2,
         onComplete: () => {
           audioRef.current?.pause();
-          exitInProgressRef.current = false;
-          callback();
+          performCleanup();
         },
       });
-      return;
+    } else {
+      performCleanup();
     }
+  }, []);
 
-    exitInProgressRef.current = false;
-    callback();
-  };
+  // ── 2. LOOP DE ANIMAÇÃO ────────────────────────────────────────────────────
+  const animate = useCallback(() => {
+    const state = threeRef.current;
+    if (!state || exitInProgress.current) return;
 
+    updateSceneElements(state);
+    updateTargets(state);
+
+    renderScene(state);
+    state.animFrameId = requestAnimationFrame(animate);
+  }, []);
+
+  const handleShoot = useCallback(() => {
+    if (!threeRef.current) return;
+
+    checkTargets(
+      threeRef.current,
+      (text, foundCount) => setUiState(prev => ({ ...prev, visibleText: text, targetsFound: foundCount })),
+      () => {
+        if (!completionTriggered.current) {
+          completionTriggered.current = true;
+          setTimeout(() => {
+            if (exitInProgress.current) return;
+            setUiState(prev => ({ ...prev, visibleText: dict.complete }));
+            completionTimeoutRef.current = window.setTimeout(() => handleExit(onComplete), 3200);
+          }, 1600);
+        }
+      }
+    );
+  }, [dict.complete, handleExit, onComplete]);
+
+  // ── 3. INICIALIZAÇÃO DA MISSÃO ─────────────────────────────────────────────
   const handleStartMission = async () => {
-    if (!canvasRef.current) return;
-
+    setShowTutorial(false);
     pauseForChapter("army");
+    
+    if (!mountRef.current) return;
+    const isTouch = window.matchMedia("(pointer: coarse)").matches || navigator.maxTouchPoints > 0;
+    setIsMobileMode(isTouch);
 
-    let isMobileInput = false;
+    if (!isTouch) mountRef.current.requestPointerLock();
+
+    const state = await initScene(mountRef.current);
+    threeRef.current = state;
+
+    setupTargets(state, dict, TARGET_POSITIONS);
+    setupControls(state, isTouch, mountRef.current, handleShoot);
 
     if (audioRef.current) {
       audioRef.current.volume = 0;
-      audioRef.current
-        .play()
-        .then(() => {
-          if (!audioRef.current) return;
-          gsap.to(audioRef.current, {
-            volume: isMuted ? 0 : 0.4,
-            duration: 2,
-            ease: "power2.inOut",
-          });
-        })
-        .catch((error) => {
-          console.warn("Autoplay blocked", error);
-        });
+      audioRef.current.play().catch(() => {});
+      gsap.to(audioRef.current, { volume: isMuted ? 0 : 0.35, duration: 2 });
     }
 
-    const orientationWithPermission = DeviceOrientationEvent as typeof DeviceOrientationEvent & {
-      requestPermission?: () => Promise<"granted" | "denied">;
-    };
-    const hasGyroPermissionApi =
-      typeof DeviceOrientationEvent !== "undefined" &&
-      typeof orientationWithPermission.requestPermission === "function";
-
-    if (hasGyroPermissionApi) {
-      try {
-        const permissionState = await orientationWithPermission.requestPermission?.();
-        if (permissionState === "granted") {
-          gameState.current.isMobile = true;
-          isMobileInput = true;
-        }
-      } catch (error) {
-        console.warn("Error requesting iOS gyroscope permission", error);
-      }
-    } else {
-      const isTouchDevice =
-        window.matchMedia("(pointer: coarse)").matches || navigator.maxTouchPoints > 0;
-
-      if (isTouchDevice) {
-        gameState.current.isMobile = true;
-        isMobileInput = true;
-      } else {
-        try {
-          canvasRef.current.requestPointerLock();
-          gameState.current.isPointerLocked = true;
-        } catch (error) {
-          console.warn("Pointer lock denied, using touch fallback", error);
-        }
-      }
-    }
-
-    setIsMobileMode(isMobileInput);
-    if (isMobileInput) {
-      setShowMobileHint(true);
-    }
-
-    setUiState((prev) => ({ ...prev, hasStarted: true, visibleText: null }));
+    setUiState(prev => ({ ...prev, hasStarted: true, visibleText: null }));
+    animate();
   };
 
   const toggleMute = () => {
     if (!audioRef.current) return;
-
-    const nextMutedState = !isMuted;
-    setIsMuted(nextMutedState);
-
-    gsap.killTweensOf(audioRef.current);
-    gsap.to(audioRef.current, {
-      volume: nextMutedState ? 0 : 0.4,
-      duration: 0.5,
-      ease: "power1.inOut",
-    });
+    const next = !isMuted;
+    setIsMuted(next);
+    gsap.to(audioRef.current, { volume: next ? 0 : 0.35, duration: 0.4 });
   };
 
-  useEffect(() => {
-    const onPointerLockChange = () => {
-      gameState.current.isPointerLocked = document.pointerLockElement === canvasRef.current;
-    };
+  const handleSkip = () => handleExit(onSkip);
 
-    document.addEventListener("pointerlockchange", onPointerLockChange);
+  useEffect(() => {
     return () => {
-      document.removeEventListener("pointerlockchange", onPointerLockChange);
+      if (threeRef.current) {
+        destroyScene(threeRef.current, mountRef.current);
+        threeRef.current = null;
+      }
+      cleanupControls();
+      if (completionTimeoutRef.current) window.clearTimeout(completionTimeoutRef.current);
     };
   }, []);
 
-  useEffect(() => {
-    if (!isActive || !canvasRef.current) return;
-
-    const canvas = canvasRef.current;
-    const ctx = canvas.getContext("2d", { alpha: false });
-    if (!ctx) return;
-
-    const targetTextById: Record<TargetNode["id"], string> = {
-      target1: dict.target1,
-      target2: dict.target2,
-      target3: dict.target3,
-    };
-
-    const resize = () => {
-      const state = gameState.current;
-      state.width = Math.max(1, window.innerWidth);
-      state.height = Math.max(1, window.innerHeight);
-      canvas.width = state.width;
-      canvas.height = state.height;
-
-      if (!state.isPointerLocked) {
-        state.mouseX = state.width / 2;
-        state.mouseY = state.height / 2;
-      }
-
-      state.isDirty = true;
-    };
-
-    resize();
-    window.addEventListener("resize", resize);
-
-    const onMouseMove = (event: MouseEvent) => {
-      if (document.pointerLockElement !== canvas) return;
-
-      const state = gameState.current;
-      state.mouseX += event.movementX;
-      state.mouseY += event.movementY;
-      state.mouseX = Math.max(0, Math.min(state.width, state.mouseX));
-      state.mouseY = Math.max(0, Math.min(state.height, state.mouseY));
-      state.isDirty = true;
-    };
-
-    const onTouchMove = (event: TouchEvent) => {
-      const touch = event.touches[0];
-      if (!touch) return;
-
-      const rect = canvas.getBoundingClientRect();
-      const state = gameState.current;
-      state.mouseX = Math.max(0, Math.min(state.width, touch.clientX - rect.left));
-      state.mouseY = Math.max(0, Math.min(state.height, touch.clientY - rect.top));
-      state.isDirty = true;
-    };
-
-    const onDeviceOrientation = (event: DeviceOrientationEvent) => {
-      if (document.pointerLockElement === canvas) return;
-      if (event.gamma === null || event.beta === null) return;
-
-      const state = gameState.current;
-      const gamma = Math.max(-45, Math.min(45, event.gamma));
-      const beta = Math.max(-45, Math.min(45, event.beta));
-
-      state.mouseX = ((gamma + 45) / 90) * state.width;
-      state.mouseY = ((beta + 45) / 90) * state.height;
-      state.isDirty = true;
-    };
-
-    document.addEventListener("mousemove", onMouseMove);
-    canvas.addEventListener("touchmove", onTouchMove, { passive: true });
-    window.addEventListener("deviceorientation", onDeviceOrientation);
-
-    const renderLoop = () => {
-      const state = gameState.current;
-
-      if (state.isDirty) {
-        const radius = Math.max(state.width, state.height) * 0.15;
-
-        ctx.globalCompositeOperation = "source-over";
-        ctx.fillStyle = "#050505";
-        ctx.fillRect(0, 0, state.width, state.height);
-
-        ctx.globalCompositeOperation = "destination-out";
-        const gradient = ctx.createRadialGradient(
-          state.mouseX,
-          state.mouseY,
-          0,
-          state.mouseX,
-          state.mouseY,
-          radius
-        );
-        gradient.addColorStop(0, "rgba(255, 255, 255, 1)");
-        gradient.addColorStop(0.5, "rgba(255, 255, 255, 0.5)");
-        gradient.addColorStop(1, "rgba(255, 255, 255, 0)");
-
-        ctx.fillStyle = gradient;
-        ctx.beginPath();
-        ctx.arc(state.mouseX, state.mouseY, radius, 0, Math.PI * 2);
-        ctx.fill();
-
-        for (const target of state.targets) {
-          if (target.isFound) continue;
-
-          const targetAbsX = target.x * state.width;
-          const targetAbsY = target.y * state.height;
-          const targetAbsRadius = target.radius * Math.max(state.width, state.height);
-          const dx = state.mouseX - targetAbsX;
-          const dy = state.mouseY - targetAbsY;
-          const distance = Math.sqrt(dx * dx + dy * dy);
-
-          if (distance < targetAbsRadius) {
-            target.isFound = true;
-            state.targetsFound += 1;
-            setUiState((prev) => ({
-              ...prev,
-              visibleText: targetTextById[target.id],
-            }));
-
-            if (state.targetsFound >= 3 && !completionTriggeredRef.current) {
-              completionTriggeredRef.current = true;
-              setUiState((prev) => ({ ...prev, visibleText: dict.complete }));
-
-              completionTimeoutRef.current = window.setTimeout(() => {
-                handleExit(onComplete);
-              }, 3000);
-            }
-          }
-        }
-
-        // Feedback visual: marcadores para os alvos encontrados.
-        ctx.globalCompositeOperation = "source-over";
-        for (const target of state.targets) {
-          if (!target.isFound) continue;
-
-          const targetAbsX = target.x * state.width;
-          const targetAbsY = target.y * state.height;
-
-          ctx.beginPath();
-          ctx.arc(targetAbsX, targetAbsY, 4, 0, Math.PI * 2);
-          ctx.fillStyle = "#C8FF00";
-          ctx.shadowBlur = 15;
-          ctx.shadowColor = "#C8FF00";
-          ctx.fill();
-          ctx.shadowBlur = 0;
-        }
-
-        state.isDirty = false;
-      }
-
-      requestRef.current = window.requestAnimationFrame(renderLoop);
-    };
-
-    requestRef.current = window.requestAnimationFrame(renderLoop);
-
-    return () => {
-      window.removeEventListener("resize", resize);
-      document.removeEventListener("mousemove", onMouseMove);
-      canvas.removeEventListener("touchmove", onTouchMove);
-      window.removeEventListener("deviceorientation", onDeviceOrientation);
-
-      if (requestRef.current !== null) {
-        cancelAnimationFrame(requestRef.current);
-        requestRef.current = null;
-      }
-
-      if (completionTimeoutRef.current !== null) {
-        window.clearTimeout(completionTimeoutRef.current);
-        completionTimeoutRef.current = null;
-      }
-
-      resumeFromChapter("army");
-
-      if (audioRef.current) {
-        gsap.killTweensOf(audioRef.current);
-      }
-
-      if (document.pointerLockElement === canvas) {
-        document.exitPointerLock();
-      }
-    };
-  }, [dict, isActive, onComplete]);
-
-  const handleSkip = () => {
-    handleExit(onSkip);
-  };
-
   return (
-    <section ref={containerRef} className="relative h-screen w-full overflow-hidden bg-black">
-      <canvas ref={canvasRef} className="absolute inset-0 h-full w-full cursor-crosshair" />
+    <section
+      ref={containerRef}
+      className={`relative h-screen w-full overflow-hidden bg-black ${uiState.hasStarted ? "is-playing" : ""}`}
+    >
+      <div ref={mountRef} className="absolute inset-0" />
 
-      <div className="pointer-events-none absolute inset-0 z-10 flex flex-col items-center justify-center">
-        {!uiState.hasStarted && (
-          <div className="pointer-events-auto text-center">
-            <p className="mb-6 max-w-xl text-white/80">{uiState.visibleText}</p>
+      {/* TELA DE TUTORIAL / INÍCIO */}
+      {!uiState.hasStarted && showTutorial && (
+        <div className="absolute inset-0 z-[100] flex items-center justify-center bg-black/95 p-6 backdrop-blur-sm">
+          <div className="max-w-lg text-center space-y-8">
+            <h2 className="font-mono text-[#C8FF00] text-xl tracking-[0.3em] uppercase drop-shadow-[0_0_10px_rgba(200,255,0,0.5)]">
+              Missão: Treinamento Theo
+            </h2>
+            <p className="font-mono text-white/70 text-sm leading-relaxed">
+              Aqui você está interpretando o Theo no exército. <br />
+              <span className="text-white">Mire nos alvos flutuantes</span> e clique para aprender mais sobre essa experiência.
+            </p>
             <button
               onClick={handleStartMission}
-              className="border border-[var(--accent)] px-6 py-3 text-sm uppercase tracking-[0.2em] text-[var(--accent)] transition-colors hover:bg-[var(--accent)] hover:text-black"
-              type="button"
+              className="px-10 py-4 border border-[#C8FF00] text-[#C8FF00] font-mono uppercase tracking-widest hover:bg-[#C8FF00] hover:text-black transition-all duration-300"
             >
-              Start Mission
+              Iniciar Treinamento
             </button>
           </div>
-        )}
+        </div>
+      )}
 
-        {uiState.hasStarted && uiState.visibleText && (
-          <div className="absolute bottom-20 max-w-xl px-6 text-center">
-            <p className="font-mono text-base text-white md:text-lg">{uiState.visibleText}</p>
+      {/* HUD: Status */}
+      {uiState.hasStarted && (
+        <>
+          <div className="pointer-events-none absolute left-8 top-8 z-20 font-mono text-xs tracking-widest text-[#C8FF00]/60">
+            ALVOS: {uiState.targetsFound} / 3
           </div>
-        )}
+          
+          {isMobileMode && (
+            <div className="pointer-events-none absolute bottom-32 left-1/2 z-20 w-max -translate-x-1/2 rounded-full border border-white/10 bg-black/50 px-4 py-2 font-mono text-[11px] uppercase tracking-widest text-white/50">
+              Arraste para mover a lanterna
+            </div>
+          )}
+        </>
+      )}
 
-        {uiState.hasStarted && isMobileMode && showMobileHint && (
-          <div
-            ref={mobileHintRef}
-            className="absolute bottom-10 rounded-full border border-white/20 bg-black/45 px-4 py-2 text-[11px] uppercase tracking-[0.2em] text-white/80"
-          >
-            Gire o aparelho para mover a lanterna
+      {/* Legendas dos Alvos */}
+      <div className="pointer-events-none absolute inset-0 z-10 flex flex-col items-center justify-center">
+        {uiState.hasStarted && uiState.visibleText && (
+          <div className="absolute bottom-24 left-1/2 w-full max-w-md -translate-x-1/2 px-6 text-center">
+            <p className="font-mono text-sm leading-relaxed text-white/90 md:text-base drop-shadow-md bg-black/20 backdrop-blur-sm py-2 rounded">
+              {uiState.visibleText}
+            </p>
           </div>
         )}
       </div>
 
+      {/* Menu Superior Direito */}
       <div className="pointer-events-auto absolute right-8 top-8 z-50 flex gap-4">
         {uiState.hasStarted && (
-          <button
-            onClick={toggleMute}
-            className="font-mono text-sm text-white/50 transition-colors hover:text-white"
-            aria-label={isMuted ? "Unmute audio" : "Mute audio"}
-            type="button"
-          >
+          <button onClick={toggleMute} className="font-mono text-sm text-white/40 transition-colors hover:text-white/80" type="button">
             [ {isMuted ? "UNMUTE" : "MUTE"} ]
           </button>
         )}
-        <button
-          onClick={handleSkip}
-          className="font-mono text-sm text-white/50 transition-colors hover:text-white"
-          aria-label={dict.skip}
-          type="button"
-        >
-          [ {dict.skip} ]
+        <button onClick={handleSkip} className="font-mono text-sm text-white/40 transition-colors hover:text-white/80" type="button">
+          [ {dict.skip || "SKIP"} ]
         </button>
       </div>
 

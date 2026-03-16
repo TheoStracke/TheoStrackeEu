@@ -2,7 +2,7 @@
 
 import { useEffect, useMemo, useRef } from "react";
 import type { Dictionary } from "@/types/dictionary";
-import { gsap, ScrollTrigger } from "@/lib/gsap";
+import { gsap } from "@/lib/gsap";
 import { SectionHeading } from "../section-heading";
 
 interface ChapterOriginProps {
@@ -63,91 +63,25 @@ export function ChapterOrigin({ dict }: ChapterOriginProps) {
     const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     if (reduceMotion) return;
 
-    const pinDistance = Math.max((beats.length - 1) * 100, 200);
-
     const ctx = gsap.context(() => {
       const validBeats = beatRefs.current.filter((el): el is HTMLDivElement => Boolean(el));
-      const validImages = imageRefs.current.filter((el): el is HTMLDivElement => Boolean(el));
-
-      gsap.set(validBeats, { autoAlpha: 0, y: 24 });
-      gsap.set(validImages, { autoAlpha: 0, xPercent: 24 });
-
-      if (validBeats[0]) {
-        gsap.set(validBeats[0], { autoAlpha: 1, y: 0 });
-      }
-
-      ScrollTrigger.create({
-        trigger: sectionRef.current,
-        start: "top top",
-        end: `+=${pinDistance}%`,
-        pin: true,
-        pinSpacing: true,
-        scrub: 1,
-      });
 
       validBeats.forEach((el, i) => {
-        const start = (i / beats.length) * pinDistance;
-        const end = ((i + 1) / beats.length) * pinDistance;
-
         gsap.fromTo(
           el,
-          { autoAlpha: 0, y: 24 },
+          { autoAlpha: 0, y: 32 },
           {
             autoAlpha: 1,
             y: 0,
+            duration: 0.8,
+            delay: i * 0.15,
             scrollTrigger: {
-              trigger: sectionRef.current,
-              start: `top+=${start}% top`,
-              end: `top+=${end}% top`,
-              scrub: 1,
+              trigger: el,
+              start: "top 85%",
+              toggleActions: "play none none none",
             },
-          }
-        );
-
-        if (i > 0) {
-          gsap.to(el, {
-            autoAlpha: 0,
-            y: -18,
-            scrollTrigger: {
-              trigger: sectionRef.current,
-              start: `top+=${Math.max(end - pinDistance / (beats.length * 2), 0)}% top`,
-              end: `top+=${end}% top`,
-              scrub: 1,
-            },
-          });
-        }
-      });
-
-      validImages.forEach((el, i) => {
-        const index = i + 1;
-        const start = (index / beats.length) * pinDistance;
-        const end = ((index + 1) / beats.length) * pinDistance;
-
-        gsap.fromTo(
-          el,
-          { xPercent: 30, autoAlpha: 0 },
-          {
-            xPercent: 0,
-            autoAlpha: 1,
-            scrollTrigger: {
-              trigger: sectionRef.current,
-              start: `top+=${start}% top`,
-              end: `top+=${end}% top`,
-              scrub: 1.5,
-            },
-          }
-        );
-
-        gsap.to(el, {
-          xPercent: -20,
-          autoAlpha: 0,
-          scrollTrigger: {
-            trigger: sectionRef.current,
-            start: `top+=${Math.max(end - pinDistance / beats.length, 0)}% top`,
-            end: `top+=${Math.min(end + pinDistance / (beats.length * 2), pinDistance)}% top`,
-            scrub: 1.5,
           },
-        });
+        );
       });
     }, sectionRef);
 
@@ -159,14 +93,13 @@ export function ChapterOrigin({ dict }: ChapterOriginProps) {
       <div className="relative z-10 grid w-full gap-10 lg:grid-cols-[1fr_420px] lg:items-center">
         <div className="space-y-8">
           <SectionHeading label={dict.title} eyebrow={dict.eyebrow} />
-          <div className="relative min-h-[240px] md:min-h-[200px]">
+          <div className="space-y-6">
             {beats.map((beat, i) => (
               <div
                 key={beat.key}
                 ref={(el) => {
                   beatRefs.current[i] = el;
                 }}
-                className={`absolute inset-0 flex items-start ${i === 0 ? "opacity-100" : "opacity-0"}`}
               >
                 <p className="max-w-xl text-2xl leading-relaxed text-neutral-200 md:text-3xl">
                   {beat.text}

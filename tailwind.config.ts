@@ -10,10 +10,10 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        background: "#FDFBF7",
-        ink: "#0A0A0A",
-        accent: "#D95F2A",
-      },
+  background: "#080808",  // era "#FDFBF7"
+  ink: "#E6E6E6",          // era "#0A0A0A"
+  accent: "#D95F2A",
+},
       fontFamily: {
         sans: ["var(--font-inter)", "system-ui", "sans-serif"],
         display: ["var(--font-space-grotesk)", "system-ui", "sans-serif"],
