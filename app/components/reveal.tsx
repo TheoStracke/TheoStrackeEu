@@ -211,7 +211,7 @@ export function RevealLetters({
       initial="hidden"
       whileInView="visible"
       viewport={{ once: true, margin: "-10%" }}
-      className={clsx("inline-flex flex-wrap overflow-hidden", className)}
+      className={clsx("inline-flex flex-wrap", className)}
     >
       {words.map((word, wordIndex) => (
         <span 

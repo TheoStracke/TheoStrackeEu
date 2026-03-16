@@ -169,11 +169,11 @@ export function LoadingScreen() {
        * physically opening the screen along the incision.
        */}
       {!geom ? (
-        <div className="absolute inset-0 bg-background z-[2]" />
+        <div className="absolute inset-0 bg-[#080808] z-[2]" />
       ) : (
         <>
           <motion.div
-            className="absolute inset-x-0 top-0 bg-background z-[2]"
+            className="absolute inset-x-0 top-0 bg-[#080808] z-[2]"
             style={{ bottom: `${geom.vwH - geom.cutY}px`, willChange: "transform" }}
             initial={false}
             animate={isSplitting ? { y: -geom.vwH } : { y: 0 }}
@@ -184,7 +184,7 @@ export function LoadingScreen() {
             }
           />
           <motion.div
-            className="absolute inset-x-0 bottom-0 bg-background z-[2]"
+            className="absolute inset-x-0 bottom-0 bg-[#080808] z-[2]"
             style={{ top: `${geom.cutY}px`, willChange: "transform" }}
             initial={false}
             animate={isSplitting ? { y: geom.vwH } : { y: 0 }}
@@ -356,7 +356,7 @@ function AnimatedLogo() {
       viewBox="0 0 307 181"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
-      className="w-full h-auto text-foreground"
+      className="w-full h-auto text-white"
       style={{ overflow: "visible" }}
     >
       {/* T stroke → fill crossfade */}
@@ -428,7 +428,7 @@ function StaticLogo() {
       viewBox="0 0 307 181"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
-      className="w-full h-auto text-foreground"
+      className="w-full h-auto text-white"
     >
       <path d={T_PATH}   fill="currentColor" />
       <path d={S_PATH}   fill="currentColor" />

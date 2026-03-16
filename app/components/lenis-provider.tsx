@@ -2,6 +2,7 @@
 
 import { useEffect, type ReactNode } from "react";
 import Lenis from "lenis";
+import { gsap, ScrollTrigger } from "../../lib/gsap";
 
 // ═══════════════════════════════════════════════════════════════════════════
 // Types
@@ -33,6 +34,7 @@ type ScrollCallback = (data: ScrollData) => void;
 let lenisInstance: Lenis | null = null;
 let scrollListeners: Set<ScrollCallback> = new Set();
 let isEnabled = true;
+const chapterScrollLocks = new Set<string>();
 
 // ═══════════════════════════════════════════════════════════════════════════
 // Easing Functions (Production-Ready Curves)
@@ -70,7 +72,34 @@ export function stopScroll(): void {
  * Resume smooth scrolling
  */
 export function startScroll(): void {
+  if (lenisInstance && isEnabled && chapterScrollLocks.size === 0) {
+    lenisInstance.start();
+  }
+}
+
+/**
+ * Pause smooth scrolling for an interactive chapter segment.
+ * Multiple chapters can request a pause; scroll resumes only when all locks are released.
+ */
+export function pauseForChapter(id: string): void {
+  if (!id) return;
+
+  chapterScrollLocks.add(id);
+
   if (lenisInstance && isEnabled) {
+    lenisInstance.stop();
+  }
+}
+
+/**
+ * Release a chapter pause lock and resume smooth scrolling when no locks remain.
+ */
+export function resumeFromChapter(id: string): void {
+  if (!id) return;
+
+  chapterScrollLocks.delete(id);
+
+  if (lenisInstance && isEnabled && chapterScrollLocks.size === 0) {
     lenisInstance.start();
   }
 }
@@ -190,15 +219,18 @@ export function LenisProvider({ children }: { children: ReactNode }) {
     lenisInstance = lenis;
     isEnabled = true;
 
-    // Manual RAF loop for maximum control
-    let rafId: number;
+    if (chapterScrollLocks.size > 0) {
+      lenis.stop();
+    }
 
-    const raf = (time: number) => {
-      lenis.raf(time);
-      rafId = requestAnimationFrame(raf);
+    // Sync Lenis with GSAP so ScrollTrigger and smooth scroll stay in lockstep.
+    const lenisTicker = (time: number) => {
+      lenis.raf(time * 1000);
     };
 
-    rafId = requestAnimationFrame(raf);
+    lenis.on("scroll", ScrollTrigger.update);
+    gsap.ticker.add(lenisTicker);
+    gsap.ticker.lagSmoothing(0);
 
     // Broadcast scroll events to all listeners (for parallax, progress, etc.)
     lenis.on("scroll", (data: any) => {
@@ -246,11 +278,13 @@ export function LenisProvider({ children }: { children: ReactNode }) {
     // Cleanup: prevent memory leaks
     return () => {
       document.removeEventListener("click", handleAnchorClick);
-      cancelAnimationFrame(rafId);
+      lenis.off("scroll", ScrollTrigger.update);
+      gsap.ticker.remove(lenisTicker);
       scrollListeners.clear();
       lenis.destroy();
       lenisInstance = null;
       isEnabled = false;
+      chapterScrollLocks.clear();
     };
   }, []);
 

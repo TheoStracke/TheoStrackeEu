@@ -10,6 +10,7 @@
       { "id": "about", "label": "About" },
       { "id": "experience", "label": "Experience" },
       { "id": "education", "label": "Education" },
+      { "id": "army", "label": "Army" },
       { "id": "skills", "label": "Skills" },
       { "id": "projects", "label": "Projects" },
       { "id": "connect", "label": "Contact" }
@@ -25,6 +26,8 @@
     "title": "THEO STRACKE.",
     "subtitle": "Front-End Developer specialized in the React and Next.js ecosystem. I build scalable, high-performance interfaces, backed by a solid foundation in Node.js and relational databases.",
     "cta": "View Projects",
+    "cardLabel": "core stack",
+    "scrollHint": "scroll to begin",
     "availability": "Available for collaboration",
     "location": "Palhoça, SC"
   },
@@ -38,6 +41,10 @@
   "about": {
     "title": "About",
     "eyebrow": "Professional Profile",
+    "beat1": "I transform complex problems into fast and accessible digital products.",
+    "beat2": "My background in enterprise technical support taught me to anticipate structural failures before they reach production.",
+    "beat3": "I do not just write code - I deeply understand product rules to propose efficient solutions.",
+    "beat4": "From database to interface, I can work confidently across the entire delivery pipeline.",
     "description": "My goal is to deliver software that generates real business impact. I don't just write code; I strive to deeply understand product rules to propose technically efficient solutions. My experience in highly demanding corporate environments, combined with my Full Stack work using tools like Node.js, Prisma, and PostgreSQL, allows me to operate confidently across the entire development pipeline. I value clean code, smart componentization, and interfaces designed for high scalability.",
     "highlights": [
       "Advanced development with React, Next.js, and TypeScript",
@@ -126,6 +133,25 @@
         ]
       }
     ]
+  },
+  "army": {
+    "intro": "Night operation engaged. Find the three markers to reveal this chapter of my journey.",
+    "target1": "Mar/2024: service begins with immersion in a high-discipline environment.",
+    "target2": "During the cycle: leadership, execution under pressure, and teamwork were reinforced.",
+    "target3": "Jan/2025: end of cycle with stronger resilience, focus, and decision-making.",
+    "complete": "Mission complete. Proceed to the next chapter.",
+    "skip": "Skip mission"
+  },
+  "thomson": {
+    "intro": "Acessando banco de dados corrompido...",
+    "instruction": "Conecte os nós para descriptografar os relatórios.",
+    "complete": "Acesso concedido. Sistemas operacionais.",
+    "skip": "Forçar Override",
+    "cards": {
+      "card1": "Atendimento técnico especializado em incidentes corporativos complexos.",
+      "card2": "Análise analítica para rastreamento profundo de fluxos de dados.",
+      "card3": "Colaboração guiada por metodologias ágeis em ambientes de alta pressão."
+    }
   },
   "skills": {
     "title": "Skills",

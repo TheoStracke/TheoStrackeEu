@@ -10,6 +10,7 @@
       { "id": "about", "label": "Sobre" },
       { "id": "experience", "label": "Experiência" },
       { "id": "education", "label": "Formação" },
+      { "id": "army", "label": "Exército" },
       { "id": "skills", "label": "Skills" },
       { "id": "projects", "label": "Projetos" },
       { "id": "connect", "label": "Contato" }
@@ -25,6 +26,8 @@
     "title": "THEO STRACKE.",
     "subtitle": "Desenvolvedor Front-End especializado no ecossistema React e Next.js. Construo interfaces escaláveis e de alta performance, aliadas a uma fundação sólida em Node.js e bancos relacionais.",
     "cta": "Ver Projetos",
+    "cardLabel": "stack principal",
+    "scrollHint": "role para começar",
     "availability": "Disponível para colaborações",
     "location": "Palhoça, SC"
   },
@@ -38,6 +41,10 @@
   "about": {
     "title": "Sobre",
     "eyebrow": "Perfil Profissional",
+    "beat1": "Transformo problemas complexos em produtos digitais rápidos e acessíveis.",
+    "beat2": "Minha base em suporte técnico enterprise me ensinou a prever falhas estruturais antes que cheguem à produção.",
+    "beat3": "Não apenas escrevo código - busco compreender a fundo as regras do produto para propor soluções eficientes.",
+    "beat4": "Do banco de dados à interface, atuo com segurança em toda a esteira de desenvolvimento.",
     "description": "Meu objetivo é entregar software que gere impacto real para o negócio. Eu não apenas escrevo código; busco compreender a fundo as regras do produto para propor soluções tecnicamente eficientes. A vivência em ambientes corporativos de alta exigência, somada à minha atuação Full Stack com ferramentas como Node.js, Prisma e PostgreSQL, me permite atuar com segurança em toda a esteira de desenvolvimento. Prezo por código limpo, componentização inteligente e interfaces projetadas para alta escalabilidade.",
     "highlights": [
       "Desenvolvimento avançado com React, Next.js e TypeScript",
@@ -126,6 +133,25 @@
         ]
       }
     ]
+  },
+  "army": {
+    "intro": "Missão noturna iniciada. Encontre os três pontos para revelar esta fase da minha trajetória.",
+    "target1": "Mar/2024: início do serviço militar e adaptação a um ambiente de alta disciplina.",
+    "target2": "Ao longo do ciclo: liderança, execução sob pressão e colaboração em equipe fortalecidas.",
+    "target3": "Jan/2025: fim do ciclo com mais resiliência, foco e tomada de decisão.",
+    "complete": "Missão concluída. Continue para o próximo capítulo.",
+    "skip": "Pular missão"
+  },
+  "thomson": {
+    "intro": "Acessando banco de dados corrompido...",
+    "instruction": "Conecte os nós para descriptografar os relatórios.",
+    "complete": "Acesso concedido. Sistemas operacionais.",
+    "skip": "Forçar Override",
+    "cards": {
+      "card1": "Atendimento técnico especializado em incidentes corporativos complexos.",
+      "card2": "Análise analítica para rastreamento profundo de fluxos de dados.",
+      "card3": "Colaboração guiada por metodologias ágeis em ambientes de alta pressão."
+    }
   },
   "skills": {
     "title": "Skills",

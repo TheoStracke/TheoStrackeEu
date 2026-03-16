@@ -1,4 +1,6 @@
 import en from "@/dictionaries/en.json";
+import type { ArmyDictionary } from "@/types/chapter-army";
+import type { ThomsonDictionary } from "@/types/chapter-thomson";
 
 type WidenLiterals<T> = T extends string
   ? string
@@ -12,4 +14,7 @@ type WidenLiterals<T> = T extends string
           ? { [K in keyof T]: WidenLiterals<T[K]> }
           : T;
 
-export type Dictionary = WidenLiterals<typeof en>;
+export type Dictionary = WidenLiterals<typeof en> & {
+  army: ArmyDictionary;
+  thomson: ThomsonDictionary;
+};

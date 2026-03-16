@@ -106,7 +106,9 @@ export default function LangLayout({ children, params }: LangLayoutProps) {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
       <LoadingScreen />
-      <PageTransition lang={params.lang}>{children}</PageTransition>
+      <div className="min-h-screen bg-[#080808] text-white">
+        <PageTransition lang={params.lang}>{children}</PageTransition>
+      </div>
     </>
   );
 }

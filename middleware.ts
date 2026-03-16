@@ -2,6 +2,8 @@ import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 import { i18n } from "./lib/i18n";
 
+const maintenanceModeEnabled = process.env.MAINTENANCE_MODE === "true";
+
 function getPreferredLocale(request: NextRequest): string {
   // 1. Primeiro de tudo: respeitar a escolha prévia do vivente (Cookie)
   const savedLocale = request.cookies.get("NEXT_LOCALE")?.value;
@@ -30,11 +32,28 @@ function getPreferredLocale(request: NextRequest): string {
 export function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
-  // Verifica se a URL já tá com o idioma certinho
   const matchedLocale = i18n.locales.find(
     (locale) => pathname === `/${locale}` || pathname.startsWith(`/${locale}/`)
   );
 
+  const isMaintenanceRoute =
+    pathname === "/maintenance" ||
+    i18n.locales.some(
+      (locale) =>
+        pathname === `/${locale}/maintenance` || pathname.startsWith(`/${locale}/maintenance/`)
+    );
+
+  if (maintenanceModeEnabled && !isMaintenanceRoute) {
+    const locale = matchedLocale || getPreferredLocale(request);
+    const redirectUrl = request.nextUrl.clone();
+    redirectUrl.pathname = `/${locale}/maintenance`;
+
+    const response = NextResponse.redirect(redirectUrl);
+    response.cookies.set("NEXT_LOCALE", locale, { path: "/" });
+    return response;
+  }
+
+  // Verifica se a URL já tá com o idioma certinho
   if (matchedLocale) {
     // Se já tá certo, só renova o cookie e segue o baile (NextResponse.next)
     const response = NextResponse.next();

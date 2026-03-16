@@ -1,7 +1,7 @@
 import { MetadataRoute } from 'next'
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://theostracke.com';
+  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://theostracke.work';
   
   // Os idiomas que tu dás suporte
   const locales = ['pt', 'en', 'es'];

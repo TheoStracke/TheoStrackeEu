@@ -10,6 +10,7 @@
       { "id": "about", "label": "Sobre mí" },
       { "id": "experience", "label": "Experiencia" },
       { "id": "education", "label": "Educación" },
+      { "id": "army", "label": "Ejército" },
       { "id": "skills", "label": "Habilidades" },
       { "id": "projects", "label": "Proyectos" },
       { "id": "connect", "label": "Contacto" }
@@ -26,6 +27,8 @@
     "title": "THEO STRACKE.",
     "subtitle": "Desarrollador Front-End especializado en el ecosistema React y Next.js. Construyo interfaces escalables y de alto rendimiento, respaldadas por una base sólida en Node.js y bases de datos relacionales.",
     "cta": "Ver Proyectos",
+    "cardLabel": "stack principal",
+    "scrollHint": "desliza para comenzar",
     "availability": "Disponible para colaboraciones",
     "location": "Palhoça, SC"
   },
@@ -39,6 +42,10 @@
   "about": {
     "title": "Sobre mí",
     "eyebrow": "Perfil Profesional",
+    "beat1": "Transformo problemas complejos en productos digitales rápidos y accesibles.",
+    "beat2": "Mi base en soporte técnico enterprise me enseñó a prever fallas estructurales antes de que lleguen a producción.",
+    "beat3": "No solo escribo código - busco comprender a fondo las reglas del producto para proponer soluciones eficientes.",
+    "beat4": "Desde la base de datos hasta la interfaz, actúo con seguridad en toda la cadena de desarrollo.",
     "description": "Mi objetivo es entregar software que genere un impacto real en el negocio. No solo escribo código; busco comprender a fondo las reglas del producto para proponer soluciones técnicamente eficientes. Mi experiencia en entornos corporativos de alta exigencia, combinada con mi trabajo Full Stack utilizando herramientas como Node.js, Prisma y PostgreSQL, me permite operar con seguridad en toda la cadena de desarrollo. Valoro el código limpio, la componentización inteligente y las interfaces diseñadas para una alta escalabilidad.",
     "highlights": [
       "Desarrollo avanzado con React, Next.js y TypeScript",
@@ -127,6 +134,25 @@
         ]
       }
     ]
+  },
+  "army": {
+    "intro": "Operación nocturna iniciada. Encuentra los tres puntos para revelar este capítulo de mi trayectoria.",
+    "target1": "Mar/2024: inicio del servicio con adaptación a un entorno de alta disciplina.",
+    "target2": "Durante el ciclo: se reforzaron el liderazgo, la ejecución bajo presión y el trabajo en equipo.",
+    "target3": "Ene/2025: cierre del ciclo con mayor resiliencia, enfoque y toma de decisiones.",
+    "complete": "Misión cumplida. Continúa al siguiente capítulo.",
+    "skip": "Saltar misión"
+  },
+  "thomson": {
+    "intro": "Acessando banco de dados corrompido...",
+    "instruction": "Conecte os nós para descriptografar os relatórios.",
+    "complete": "Acesso concedido. Sistemas operacionais.",
+    "skip": "Forçar Override",
+    "cards": {
+      "card1": "Atendimento técnico especializado em incidentes corporativos complexos.",
+      "card2": "Análise analítica para rastreamento profundo de fluxos de dados.",
+      "card3": "Colaboração guiada por metodologias ágeis em ambientes de alta pressão."
+    }
   },
   "skills": {
     "title": "Habilidades",

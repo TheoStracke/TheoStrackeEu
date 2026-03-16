@@ -1,0 +1,474 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Roadmap de Implementação</title>
+  <style>
+    :root {
+      --bg-body: #0f1115;
+      --bg-card: #171a21;
+      --bg-hover: #1c2029;
+      --text-primary: #e6e6e6;
+      --text-secondary: #9ca3af;
+      --text-muted: #6b7280;
+      --border-light: rgba(255, 255, 255, 0.05);
+      --border-medium: rgba(255, 255, 255, 0.08);
+      --border-focus: rgba(255, 255, 255, 0.16);
+      --success: #22c55e;
+      --success-gradient: linear-gradient(90deg, #22c55e, #4ade80);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: Inter, system-ui, Arial, sans-serif;
+      background: var(--bg-body);
+      color: var(--text-primary);
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .roadmap {
+      padding: 24px;
+      max-width: 900px;
+      margin: 0 auto;
+    }
+
+    /* HEADER GERAL */
+    .roadmap-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 24px;
+      padding: 0 4px;
+    }
+
+    .roadmap-title {
+      font-size: 16px;
+      font-weight: 600;
+      color: var(--text-primary);
+    }
+
+    .roadmap-subtitle {
+      font-size: 13px;
+      color: var(--text-secondary);
+      margin-top: 4px;
+    }
+
+    .progress-container {
+      text-align: right;
+    }
+
+    .progress-text {
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--text-primary);
+      margin-bottom: 6px;
+    }
+
+    .progress-bar {
+      height: 6px;
+      width: 140px;
+      background: var(--bg-card);
+      border-radius: 6px;
+      overflow: hidden;
+    }
+
+    .progress-fill {
+      height: 100%;
+      background: var(--success-gradient);
+      border-radius: 6px;
+      transition: width 0.4s ease;
+    }
+
+    /* PHASE CARD */
+    .phase {
+      margin-bottom: 16px;
+      border: 1px solid var(--border-medium);
+      border-radius: 12px;
+      background: var(--bg-card);
+      overflow: hidden;
+      transition: border-color 0.2s;
+    }
+
+    .phase:hover {
+      border-color: var(--border-focus);
+    }
+
+    .phase-header {
+      padding: 16px 20px;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      cursor: pointer;
+      user-select: none;
+    }
+
+    .phase-title {
+      font-size: 15px;
+      font-weight: 600;
+      flex: 1;
+    }
+
+    .phase-meta {
+      font-size: 13px;
+      color: var(--text-secondary);
+    }
+
+    .phase-progress {
+      font-size: 13px;
+      color: var(--text-muted);
+      font-weight: 500;
+    }
+
+    .phase-badge {
+      font-size: 11px;
+      font-weight: 600;
+      padding: 4px 10px;
+      border-radius: 20px;
+      letter-spacing: 0.3px;
+      text-transform: uppercase;
+    }
+
+    /* TASKS */
+    .tasks {
+      border-top: 1px solid var(--border-light);
+    }
+
+    .task {
+      display: flex;
+      align-items: flex-start;
+      gap: 14px;
+      padding: 16px 20px;
+      border-bottom: 1px solid var(--border-light);
+      cursor: pointer;
+      transition: background 0.15s;
+    }
+
+    .task:last-child {
+      border-bottom: none;
+    }
+
+    .task:hover {
+      background: var(--bg-hover);
+    }
+
+    /* CHECKBOX */
+    .checkbox {
+      width: 20px;
+      height: 20px;
+      border: 2px solid #3b4251;
+      border-radius: 6px;
+      flex-shrink: 0;
+      margin-top: 2px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s ease;
+    }
+
+    .checkbox.done {
+      background: var(--success);
+      border-color: var(--success);
+    }
+
+    .checkmark {
+      width: 12px;
+      height: 10px;
+      display: none;
+    }
+
+    .checkbox.done .checkmark {
+      display: block;
+    }
+
+    /* TASK BODY */
+    .task-body {
+      flex: 1;
+    }
+
+    .task-title {
+      font-size: 14px;
+      font-weight: 500;
+      line-height: 1.5;
+      transition: color 0.2s;
+    }
+
+    .task-title.done {
+      color: var(--text-muted);
+      text-decoration: line-through;
+    }
+
+    .task-sub {
+      font-size: 13px;
+      color: var(--text-secondary);
+      margin-top: 6px;
+      line-height: 1.5;
+    }
+
+    /* TAGS */
+    .task-tags {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-top: 10px;
+    }
+
+    .tag {
+      font-size: 10px;
+      padding: 4px 10px;
+      border-radius: 20px;
+      font-weight: 600;
+      letter-spacing: 0.3px;
+      text-transform: uppercase;
+    }
+
+    .tag-tech { background: #1f2937; color: #60a5fa; }
+    .tag-new  { background: #052e1a; color: #22c55e; }
+    .tag-fix  { background: #3f2a04; color: #f59e0b; }
+    .tag-del  { background: #3f0a0a; color: #ef4444; }
+
+    /* CHEVRON */
+    .chevron {
+      font-size: 12px;
+      color: var(--text-muted);
+      transition: transform 0.3s ease;
+    }
+
+    .chevron.open {
+      transform: rotate(180deg);
+    }
+  </style>
+</head>
+<body>
+
+  <div class="roadmap" id="app"></div>
+
+  <script>
+    const phases = [
+      {
+        id: 0,
+        label: "Fase 0",
+        title: "Correções imediatas — antes de qualquer coisa",
+        duration: "1–2 dias",
+        color: "#E24B4A",
+        tasks: [
+          { t: "Unificar domínio canônico", s: "Checar metadata, sitemap.ts, robots.ts, og/route.tsx e globals — tudo deve apontar para theostracke.work", tags: ["fix"] },
+          { t: "Instalar GSAP + ScrollTrigger", s: "npm install gsap · criar util lib/gsap.ts exportando gsap e ScrollTrigger já registrado", tags: ["tech", "new"] },
+          { t: "Integrar GSAP com LenisProvider", s: "No LenisProvider.tsx: lenis.on('scroll', ScrollTrigger.update) + gsap.ticker.add((t)=>lenis.raf(t*1000)) + lagSmoothing(0)", tags: ["fix", "tech"] },
+          { t: "Instalar D3.js", s: "npm install d3 · necessário para o grafo de skills no Capítulo 7", tags: ["tech", "new"] },
+          { t: "Definir cor accent do novo site", s: "Escolher e documentar: sugestão #C8FF00 (verde-limão). Adicionar em globals.css como --accent e --accent-muted", tags: ["fix"] },
+        ]
+      },
+      {
+        id: 1,
+        label: "Fase 1",
+        title: "Refatoração da estrutura de scroll",
+        duration: "3–4 dias",
+        color: "#BA7517",
+        tasks: [
+          { t: "Criar sistema de capítulos em home-page.tsx", s: "Substituir lista de seções por array CHAPTERS com id, trigger e componente. Cada capítulo ocupa 100vh mínimo", tags: ["fix", "tech"] },
+          { t: "Criar ChapterWrapper genérico", s: "components/chapter-wrapper.tsx — recebe id, onEnter, onLeave callbacks. Usa useEffect + ScrollTrigger.create() internamente", tags: ["new", "tech"] },
+          { t: "Criar barra de progresso lateral", s: "components/story-progress.tsx — linha vertical crescente que persiste em todos os capítulos. Alimentada por ScrollTrigger progress", tags: ["new"] },
+          { t: "Remover SideNav atual", s: "O SideNav por âncoras conflita com a narrativa linear de scroll. Substituir por indicador de capítulo discreto no canto superior direito", tags: ["del"] },
+          { t: "Criar ChapterIndicator", s: "components/chapter-indicator.tsx — mostra qual capítulo está ativo (ex: '03 / 08') com fade. Substitui o SideNav", tags: ["new"] },
+          { t: "Adaptar LenisProvider para pausar/retomar por capítulo", s: "Expor métodos pauseForChapter(id) e resumeFromChapter(id) — necessário para FPS e Matrix travarem o scroll", tags: ["fix", "tech"] },
+        ]
+      },
+      {
+        id: 2,
+        label: "Fase 2",
+        title: "Capítulos simples — Hero, Origem, Formação",
+        duration: "4–5 dias",
+        color: "#378ADD",
+        tasks: [
+          { t: "Refatorar Hero", s: "Manter: nome, cargo, badge disponível, seletor de idiomas. Adicionar: fundo preto com grain CSS, instrução de scroll animada. Remover: qualquer imagem de fundo", tags: ["fix"] },
+          { t: "Criar Capítulo Origem (Sobre)", s: "Texto dividido em 3–4 blocos curtos. Cada bloco tem pin próprio com scrub:1. Imagens entram/saem com parallax horizontal via GSAP", tags: ["new"] },
+          { t: "Adaptar copy do About para unidades narrativas", s: "Dividir o texto longo atual em frases de impacto curtas nos dicionários pt/en/es. Cada frase é uma 'beat' da narrativa", tags: ["fix"] },
+          { t: "Criar Capítulo Formação (Senac)", s: "Timeline horizontal simples com DrawSVG do GSAP. Duas entradas: ADS e Técnico em Jogos. Vinheta escurecendo nas bordas na saída", tags: ["new", "tech"] },
+          { t: "Adaptar Reveal system para ScrollTrigger", s: "Os componentes RevealLetters/RevealWords atuais usam Framer Motion viewport. Criar versão alternativa que usa ScrollTrigger como trigger", tags: ["fix", "tech"] },
+          { t: "Adaptar LoadingScreen — ajustar para paleta escura", s: "LoadingScreen atual está calibrado para fundo off-white. Ajustar transição final para abrir sobre fundo preto do Hero", tags: ["fix"] },
+        ]
+      },
+      {
+        id: 3,
+        label: "Fase 3",
+        title: "Capítulo Exército — FPS com Lanterna ⭐",
+        duration: "7–10 dias",
+        color: "#4A5568",
+        tasks: [
+          { t: "Criar components/chapters/chapter-army.tsx", s: "Componente isolado. Recebe callbacks onComplete e onSkip. Gerencia todo o estado interno do segmento FPS", tags: ["new", "tech"] },
+          { t: "Criar canvas lanterna (radial light engine)", s: "Canvas 2D fullscreen. requestAnimationFrame com isDirty flag. radialGradient dinâmico seguindo mouseX/mouseY. Render só quando mouse move", tags: ["new", "tech"] },
+          { t: "Implementar Pointer Lock API", s: "canvas.requestPointerLock() na entrada do capítulo. Usar movementX/movementY para acumular posição real. Fallback gracioso se browser negar permissão", tags: ["new", "tech"] },
+          { t: "Criar sistema de alvos fixos", s: "3 alvos em posições definidas no design (não aleatórias). Cada alvo: pulso fraco de luz, hitbox circular, estado illuminated. Ao iluminar: revela fragmento de info", tags: ["new"] },
+          { t: "Criar lógica de missão e desbloqueio de scroll", s: "State: targetsFound (0–3). Quando 3: animação de missão cumprida → chamar resumeFromChapter() → habilitar scroll novamente", tags: ["new", "tech"] },
+          { t: "Implementar botão Pular Missão", s: "Sempre visível. Posição fixa dentro do canvas. Chama onSkip() que libera scroll imediatamente. Obrigatório por acessibilidade", tags: ["new"] },
+          { t: "DeviceOrientation API para mobile", s: "Em touch: giroscópio controla a lanterna. addEventListener('deviceorientation'). Mesma lógica de alvos e missão", tags: ["new", "tech"] },
+          { t: "Web Audio API — som ambiente", s: "Arquivo de áudio curto (vento, silêncio). Fade in na entrada do capítulo, fade out na saída. Botão mute visível. Não bloquear se autoplay for negado", tags: ["new"] },
+          { t: "Traduzir textos do capítulo nos dicionários", s: "Adicionar chave army: { intro, target1, target2, target3, complete, skip } em pt/en/es.json", tags: ["fix"] },
+        ]
+      },
+      {
+        id: 4,
+        label: "Fase 4",
+        title: "Capítulo Thomson Reuters — Matrix + Connect-the-dots ⭐",
+        duration: "5–7 dias",
+        color: "#185FA5",
+        tasks: [
+          { t: "Criar components/chapters/chapter-thomson.tsx", s: "Componente isolado com as mesmas interfaces: onComplete, onSkip", tags: ["new", "tech"] },
+          { t: "Efeito de pixelização na transição de entrada", s: "CSS filter: blur + pixelate progressivo usando canvas scale. Dura ~1.5s. Faz ponte entre cap. Exército e Thomson", tags: ["new", "tech"] },
+          { t: "Canvas Matrix rain (0s e 1s caindo)", s: "Canvas 2D clássico. Colunas de caracteres em queda. Velocidade e densidade controladas. Desacelera gradualmente até parar nos pontos de conexão", tags: ["new", "tech"] },
+          { t: "Sistema connect-the-dots SVG", s: "SVG overlay com pontos pré-posicionados formando logo TR. Linhas desenhadas via SVG path + stroke-dashoffset animado ao clicar/arrastar entre pontos", tags: ["new", "tech"] },
+          { t: "Instrução interativa: 'Conecte os pontos'", s: "Texto fade-in após Matrix desacelerar. Indicação clara do que fazer. Desaparece após primeiro clique", tags: ["new"] },
+          { t: "Click-hold com progresso circular", s: "Ao completar o logo TR: SVG com stroke-dashoffset circular se enche durante click-hold (~1.5s). Ao completar: dispara explosão de partículas", tags: ["new", "tech"] },
+          { t: "Animação de explosão → cards de info", s: "Partículas GSAP MotionPath se reorganizam em cards com informações da Thomson Reuters. Cards animam entrada com stagger", tags: ["new", "tech"] },
+          { t: "Botão Pular e tradução nos dicionários", s: "Adicionar chave thomson: { intro, instruction, complete, skip } nos 3 dicionários", tags: ["fix"] },
+        ]
+      },
+      {
+        id: 5,
+        label: "Fase 5",
+        title: "Capítulos Vellum, Projetos e Contato",
+        duration: "4–5 dias",
+        color: "#0F6E56",
+        tasks: [
+          { t: "Criar Capítulo Vellum", s: "Fundo claro (quebra o padrão escuro). Badge '● Atual' pulsando. Mockup real do SisCeD em moldura de browser. Contador animado de impacto com GSAP CountUp", tags: ["new"] },
+          { t: "Substituir thumbnails SVG por screenshots reais", s: "DespaFácil e SisCeD precisam de screenshots ou vídeo em autoplay muted. Atualizar ProjectCard e dicionários de projetos", tags: ["fix"] },
+          { t: "Criar páginas de case study", s: "app/[lang]/projetos/[slug]/page.tsx. Estrutura: problema → processo → solução → resultado. Com screenshots em alta fidelidade e decisões técnicas", tags: ["new"] },
+          { t: "Adicionar terceiro projeto ou experimental", s: "Mínimo 3 projetos para construir confiança. Pode ser um projeto pessoal, open source ou experimento técnico", tags: ["fix"] },
+          { t: "Corrigir bug semântico na Experiência", s: "Remover tag 'Tecnologias' da entrada do Exército Brasileiro no dicionário. Usar campo diferente como 'learnings' ou simplesmente omitir", tags: ["fix"] },
+          { t: "Substituir links de contato por formulário inline", s: "Remover mailto puro. Criar FormulárioContato com campos nome/email/mensagem. Animação de envio (botão → checkmark). Integrar com Resend ou Formspree", tags: ["fix", "new"] },
+        ]
+      },
+      {
+        id: 6,
+        label: "Fase 6",
+        title: "Grafo de Skills com D3.js",
+        duration: "3–4 dias",
+        color: "#534AB7",
+        tasks: [
+          { t: "Remover SkillsSection (Marquee duplo) atual", s: "Deletar components/skills-section.tsx e Marquee.tsx. Remover do home-page.tsx", tags: ["del"] },
+          { t: "Remover NeuralOverlay de skills", s: "Substituído pelo grafo. Deletar components/neural-overlay.tsx e referências. MorphingButton da Experience também pode ser simplificado", tags: ["del"] },
+          { t: "Criar SkillsGraph com D3 forceSimulation", s: "components/skills-graph.tsx. Nós = tecnologias. Arestas = tecnologias usadas juntas em projetos. forceLink + forceCharge + forceCenter", tags: ["new", "tech"] },
+          { t: "Hover no nó: destacar conexões e projetos", s: "onMouseover: destacar arestas do nó, fade nos demais, mostrar tooltip com projetos onde foi usado", tags: ["new"] },
+          { t: "Responsividade do grafo", s: "Em mobile: grafo menor, nós maiores para toque, desativar hover e usar tap. Usar ResizeObserver para redimensionar o SVG D3", tags: ["new", "tech"] },
+          { t: "Popular dados do grafo nos dicionários", s: "Adicionar skills: { nodes: [{id, label, category}], links: [{source, target, projects:[]}] } nos JSONs", tags: ["fix"] },
+        ]
+      },
+      {
+        id: 7,
+        label: "Fase 7",
+        title: "Polimento, performance e acessibilidade",
+        duration: "3–4 dias",
+        color: "#888780",
+        tasks: [
+          { t: "Audit de performance — Lighthouse", s: "Meta: Performance ≥90, Accessibility ≥90, Best Practices 100, SEO 100. Focar em LCP, CLS e FID", tags: ["fix"] },
+          { t: "Otimizar assets dos projetos", s: "Usar next/image para todos screenshots. Definir width/height explícitos. Converter para WebP. Lazy load nas seções abaixo do fold", tags: ["fix", "tech"] },
+          { t: "prefers-reduced-motion em todas as animações", s: "Envolver cada GSAP animation e Canvas loop em if(!window.matchMedia('(prefers-reduced-motion: reduce)').matches). Mostrar versão estática como fallback", tags: ["fix"] },
+          { t: "Garantir botão Pular em todos os segmentos interativos", s: "FPS e Thomson: botão Pular sempre acessível via teclado (Tab + Enter). Testar com screen reader", tags: ["fix"] },
+          { t: "Testar experiência mobile completa", s: "iOS Safari e Chrome Android. Pointer Lock não funciona em mobile — garantir fallback giroscópio está ativo. Canvas performance em dispositivos mid-range", tags: ["fix"] },
+          { t: "Atualizar todos os dicionários (pt/en/es)", s: "Revisar todas as novas chaves adicionadas nas fases anteriores. Garantir que EN e ES têm tradução completa e não apenas cópia do PT", tags: ["fix"] },
+          { t: "Remover dependências não mais utilizadas", s: "Após deletar NeuralOverlay e Marquee: verificar se há imports órfãos. Rodar npm run build e corrigir todos os warnings", tags: ["fix"] },
+        ]
+      }
+    ];
+
+    // Helpers
+    const getTagLabel = (tag) => {
+      const labels = { new: 'novo', fix: 'ajuste', del: 'remover' };
+      return labels[tag] || tag;
+    };
+
+    const getSvgCheck = () => `
+      <svg class="checkmark" viewBox="0 0 8 6" fill="none">
+        <path d="M1 3L3 5L7 1" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    `;
+
+    function render() {
+      const app = document.getElementById('app');
+      const allTasks = phases.flatMap(p => p.tasks);
+      const doneCount = allTasks.filter(t => t.done).length;
+      const totalCount = allTasks.length;
+      const progressPercent = Math.round((doneCount / totalCount) * 100) || 0;
+
+      let html = `
+        <div class="roadmap-header">
+          <div>
+            <div class="roadmap-title">Roadmap de implementação</div>
+            <div class="roadmap-subtitle">${totalCount} tarefas · ${phases.length} fases</div>
+          </div>
+          <div class="progress-container">
+            <div class="progress-text">${doneCount}/${totalCount} concluídas</div>
+            <div class="progress-bar">
+              <div class="progress-fill" style="width: ${progressPercent}%"></div>
+            </div>
+          </div>
+        </div>
+      `;
+
+      phases.forEach((phase, phaseIndex) => {
+        const phaseDoneCount = phase.tasks.filter(t => t.done).length;
+        const isOpen = phase.open !== false;
+        
+        html += `
+          <div class="phase">
+            <div class="phase-header" onclick="togglePhase(${phaseIndex})">
+              <div class="phase-badge" style="background: ${phase.color}22; color: ${phase.color}">${phase.label}</div>
+              <div class="phase-title">${phase.title}</div>
+              <div class="phase-meta">${phase.duration}</div>
+              <div class="phase-progress">${phaseDoneCount}/${phase.tasks.length}</div>
+              <div class="chevron ${isOpen ? 'open' : ''}">▼</div>
+            </div>
+        `;
+
+        if (isOpen) {
+          html += `<div class="tasks">`;
+          phase.tasks.forEach((task, taskIndex) => {
+            const tagsHtml = task.tags.map(tag => 
+              `<span class="tag tag-${tag}">${getTagLabel(tag)}</span>`
+            ).join('');
+
+            html += `
+              <div class="task" onclick="toggleTask(${phaseIndex}, ${taskIndex})">
+                <div class="checkbox ${task.done ? 'done' : ''}">
+                  ${getSvgCheck()}
+                </div>
+                <div class="task-body">
+                  <div class="task-title ${task.done ? 'done' : ''}">${task.t}</div>
+                  <div class="task-sub">${task.s}</div>
+                  <div class="task-tags">${tagsHtml}</div>
+                </div>
+              </div>
+            `;
+          });
+          html += `</div>`;
+        }
+        
+        html += `</div>`;
+      });
+
+      app.innerHTML = html;
+    }
+
+    // Ações globais anexadas à janela para os inline onclicks funcionarem
+    window.togglePhase = function(phaseIndex) {
+      phases[phaseIndex].open = !phases[phaseIndex].open;
+      render();
+    };
+
+    window.toggleTask = function(phaseIndex, taskIndex) {
+      phases[phaseIndex].tasks[taskIndex].done = !phases[phaseIndex].tasks[taskIndex].done;
+      render();
+    };
+
+    // Inicialização
+    phases.forEach(p => p.open = true);
+    render();
+  </script>
+</body>
+</html>

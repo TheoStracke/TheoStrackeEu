@@ -66,7 +66,7 @@ export async function GET(request: NextRequest) {
             }}
           >
             <span style={{ fontSize: 28, color: '#0A0A0A', fontWeight: 500, letterSpacing: '0.05em' }}>
-              theostracke.com
+              theostracke.work
             </span>
             <span style={{ fontSize: 28, color: '#0A0A0A', fontWeight: 500, letterSpacing: '0.05em' }}>
               Palhoça, SC
