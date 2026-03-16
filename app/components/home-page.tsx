@@ -19,6 +19,7 @@ import { ChapterEducation } from "./chapters/chapter-education";
 import { ChapterArmy } from "./chapters/chapter-army";
 import { ChapterThomson } from "./chapters/chapter-thomson";
 import { ScrollTrigger } from "@/lib/gsap";
+import { SkillsGraph } from "./skills-graph";
 
 interface HomePageProps {
   lang: Locale;
@@ -107,10 +108,15 @@ export function HomePage({ lang, dictionary }: HomePageProps) {
         <ChapterThomson
           dict={dictionary.thomson}
           isActive={activeChapterId === "thomson"}
-          onComplete={() => scrollTo("#vellum", { duration: 1.2 })}
-          onSkip={() => scrollTo("#vellum", { duration: 1.2 })}
+          onComplete={() => scrollTo("#skills", { duration: 1.2 })}
+          onSkip={() => scrollTo("#skills", { duration: 1.2 })}
         />
       ),
+    },
+    {
+      id: "skills",
+      trigger: "top 80%",
+      component: <SkillsGraph t={dictionary.skills} />,
     },
     {
       id: "vellum",
@@ -235,7 +241,7 @@ export function HomePage({ lang, dictionary }: HomePageProps) {
 
       {/* Capítulos pós-Army — dentro do container */}
       <div className="mx-auto flex max-w-6xl flex-col gap-20 px-6 pb-24 md:px-12 lg:px-20">
-        {CHAPTERS.filter((c) => ["thomson", "vellum", "projects", "connect"].includes(c.id)).map((chapter) => (
+        {CHAPTERS.filter((c) => ["thomson", "skills", "vellum", "projects", "connect"].includes(c.id)).map((chapter) => (
           <ChapterWrapper
             key={chapter.id}
             id={chapter.id}

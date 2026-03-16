@@ -144,32 +144,60 @@
     "skip": "Saltar misión"
   },
   "thomson": {
-    "intro": "Acessando banco de dados corrompido...",
-    "instruction": "Conecte os nós para descriptografar os relatórios.",
-    "complete": "Acesso concedido. Sistemas operacionais.",
-    "skip": "Forçar Override",
+    "intro": "Accediendo a la base de datos corrupta...",
+    "instruction": "Conecta los nodos para descifrar los informes.",
+    "complete": "Acceso concedido. Sistemas operativos.",
+    "skip": "Forzar Override",
     "cards": {
-      "card1": "Atendimento técnico especializado em incidentes corporativos complexos.",
-      "card2": "Análise analítica para rastreamento profundo de fluxos de dados.",
-      "card3": "Colaboração guiada por metodologias ágeis em ambientes de alta pressão."
+      "card1": "Soporte técnico especializado en incidentes corporativos complejos.",
+      "card2": "Análisis analítico para el rastreo profundo de flujos de datos.",
+      "card3": "Colaboración guiada por metodologías ágiles en entornos de alta presión."
     }
+  },
+  "vellum": {
+    "title": "Vellum",
+    "eyebrow": "Experiencia Actual",
+    "badge": "● En curso",
+    "role": "Desarrollador Full Stack",
+    "period": "Feb/2025 - Presente",
+    "description": "Liderando el desarrollo de la plataforma SISCED, un ecosistema completo para la gestión y emisión de certificados educativos. Diseñando soluciones escalables con Next.js y Node.js para apoyar a una red creciente de estudiantes e instituciones.",
+    "impact": {
+      "label": "Certificados emitidos",
+      "value": 1200
+    },
+    "mockupAlt": "Interfaz del sistema SISCED de Vellum",
+    "logoAlt": "Logotipo de Vellum"
   },
   "skills": {
     "title": "Habilidades",
     "eyebrow": "Stack Tecnológico",
-    "items": [
-      "TypeScript",
-      "React",
-      "Next.js",
-      "Node.js",
-      "Express.js",
-      "Prisma ORM",
-      "PostgreSQL",
-      "Supabase",
-      "Tailwind CSS",
-      "Framer Motion",
-      "Git & CI/CD",
-      "APIs RESTful"
+    "nodes": [
+      { "id": "typescript", "label": "TypeScript", "category": "language" },
+      { "id": "react", "label": "React", "category": "framework" },
+      { "id": "nextjs", "label": "Next.js", "category": "framework" },
+      { "id": "nodejs", "label": "Node.js", "category": "framework" },
+      { "id": "expressjs", "label": "Express.js", "category": "framework" },
+      { "id": "tailwindcss", "label": "Tailwind CSS", "category": "framework" },
+      { "id": "framermotion", "label": "Framer Motion", "category": "framework" },
+      { "id": "prisma", "label": "Prisma ORM", "category": "database" },
+      { "id": "postgresql", "label": "PostgreSQL", "category": "database" },
+      { "id": "supabase", "label": "Supabase", "category": "database" },
+      { "id": "git", "label": "Git & CI/CD", "category": "tooling" },
+      { "id": "restapi", "label": "APIs RESTful", "category": "tooling" }
+    ],
+    "links": [
+      { "source": "typescript", "target": "react", "projects": ["despa-facil"] },
+      { "source": "typescript", "target": "nextjs", "projects": ["sisced"] },
+      { "source": "typescript", "target": "nodejs", "projects": ["sisced"] },
+      { "source": "react", "target": "tailwindcss", "projects": ["despa-facil"] },
+      { "source": "react", "target": "framermotion", "projects": ["portfolio"] },
+      { "source": "nextjs", "target": "tailwindcss", "projects": ["portfolio", "sisced"] },
+      { "source": "nodejs", "target": "expressjs", "projects": ["sisced"] },
+      { "source": "expressjs", "target": "restapi", "projects": ["sisced"] },
+      { "source": "nodejs", "target": "prisma", "projects": ["sisced"] },
+      { "source": "prisma", "target": "postgresql", "projects": ["sisced"] },
+      { "source": "react", "target": "supabase", "projects": ["despa-facil"] },
+      { "source": "git", "target": "nextjs", "projects": ["all"] }
     ]
   },
   "projects": {
