@@ -89,7 +89,7 @@ export function ChapterOrigin({ dict }: ChapterOriginProps) {
   }, [beats]);
 
   return (
-    <section ref={sectionRef} className="chapter-origin relative flex min-h-screen items-center">
+    <section ref={sectionRef} className="chapter-origin relative py-24">
       <div className="relative z-10 grid w-full gap-10 lg:grid-cols-[1fr_420px] lg:items-center">
         <div className="space-y-8">
           <SectionHeading label={dict.title} eyebrow={dict.eyebrow} />

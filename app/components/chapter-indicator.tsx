@@ -16,7 +16,7 @@ export function ChapterIndicator({
   className,
 }: ChapterIndicatorProps) {
   const rootClassName = [
-    "pointer-events-none fixed right-6 top-6 z-[100] hidden rounded-full border border-ink/15 bg-background/85 px-4 py-2 backdrop-blur-md md:flex md:items-center md:gap-3",
+    "pointer-events-none fixed right-6 top-6 z-[100] hidden rounded-full border border-white/10 bg-white/[0.06] px-4 py-2 backdrop-blur-md md:flex md:items-center md:gap-3",
     className,
   ]
     .filter(Boolean)

@@ -117,10 +117,13 @@ export const ChapterArmy: React.FC<ChapterArmyProps> = ({ dict, onComplete, onSk
     const isTouch = window.matchMedia("(pointer: coarse)").matches || navigator.maxTouchPoints > 0;
     setIsMobileMode(isTouch);
 
-    if (!isTouch) mountRef.current.requestPointerLock();
-
     const state = await initScene(mountRef.current);
     threeRef.current = state;
+
+    const canvas = mountRef.current.querySelector("canvas") as HTMLCanvasElement | null;
+    if (!isTouch && canvas) {
+      canvas.requestPointerLock();
+    }
 
     setupTargets(state, dict, TARGET_POSITIONS);
     setupControls(state, isTouch, mountRef.current, handleShoot);

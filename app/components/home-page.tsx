@@ -18,6 +18,7 @@ import { ChapterOrigin } from "./chapters/chapter-origin";
 import { ChapterEducation } from "./chapters/chapter-education";
 import { ChapterArmy } from "./chapters/chapter-army";
 import { ChapterThomson } from "./chapters/chapter-thomson";
+import { ChapterVellum } from "./chapters/chapter-vellum";
 import { ScrollTrigger } from "@/lib/gsap";
 import { SkillsGraph } from "./skills-graph";
 
@@ -120,12 +121,8 @@ export function HomePage({ lang, dictionary }: HomePageProps) {
     },
     {
       id: "vellum",
-      trigger: "top top",
-      component: (
-        <div className="flex min-h-screen items-center justify-center border border-dashed border-white/20 font-mono text-white/50">
-          [ CAPITULO VELLUM - EM CONSTRUCAO ]
-        </div>
-      ),
+      trigger: "top 70%",
+      component: <ChapterVellum t={dictionary.vellum} lang={lang} />,
     },
     {
       id: "projects",
@@ -239,9 +236,14 @@ export function HomePage({ lang, dictionary }: HomePageProps) {
         {CHAPTERS.find((c) => c.id === "army")!.component}
       </ChapterWrapper>
 
-      {/* Capítulos pós-Army — dentro do container */}
+      {/* Thomson — full-bleed */}
+      <ChapterWrapper id="thomson" start="top top" onEnter={setActiveChapterId}>
+        {CHAPTERS.find((c) => c.id === "thomson")!.component}
+      </ChapterWrapper>
+
+      {/* Capítulos pós-Thomson — dentro do container */}
       <div className="mx-auto flex max-w-6xl flex-col gap-20 px-6 pb-24 md:px-12 lg:px-20">
-        {CHAPTERS.filter((c) => ["thomson", "skills", "vellum", "projects", "connect"].includes(c.id)).map((chapter) => (
+        {CHAPTERS.filter((c) => ["skills", "vellum", "projects", "connect"].includes(c.id)).map((chapter) => (
           <ChapterWrapper
             key={chapter.id}
             id={chapter.id}

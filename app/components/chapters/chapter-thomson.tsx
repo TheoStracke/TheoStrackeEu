@@ -19,6 +19,7 @@ export const ChapterThomson: React.FC<ChapterThomsonProps> = ({
   onSkip,
 }) => {
   const containerRef = useRef<HTMLDivElement>(null);
+  const overlayRef = useRef<HTMLDivElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const logoRef = useRef<SVGSVGElement>(null);
   const decryptTweenRef = useRef<gsap.core.Tween | null>(null);
@@ -48,6 +49,14 @@ export const ChapterThomson: React.FC<ChapterThomsonProps> = ({
         { filter: "brightness(0) contrast(1.2) blur(10px)" },
         { filter: "brightness(1) contrast(1) blur(0px)", duration: 1.5, ease: "power2.out" }
       );
+
+      if (overlayRef.current) {
+        gsap.fromTo(
+          overlayRef.current,
+          { opacity: 1 },
+          { opacity: 0, duration: 1.8, ease: "power2.out", delay: 0.3 }
+        );
+      }
 
       setUiState({ phase: "boot", text: dict.intro });
       setConnections([]);
@@ -220,6 +229,11 @@ export const ChapterThomson: React.FC<ChapterThomsonProps> = ({
       onPointerUp={() => handlePointerUp()}
       onPointerLeave={() => handlePointerUp()}
     >
+      <div
+        ref={overlayRef}
+        className="pointer-events-none absolute inset-0 z-50 bg-black"
+      />
+
       <canvas ref={canvasRef} className="absolute inset-0 h-full w-full opacity-60" />
 
       <div className="pointer-events-none absolute left-1/2 top-20 z-20 -translate-x-1/2">

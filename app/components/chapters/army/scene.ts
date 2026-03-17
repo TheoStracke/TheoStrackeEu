@@ -80,22 +80,24 @@ export const initScene = async (container: HTMLElement): Promise<ThreeState> => 
   const grid = new THREE.GridHelper(100, 60, 0x0d120d, 0x0a0f0a);
   scene.add(grid);
 
-  // 4. VEGETAÇÃO (Agora declarada DEPOIS da scene estar pronta)
-  const textureLoader = new THREE.TextureLoader();
-  const treeTex = textureLoader.load('/tree.png'); // Certifique-se que o arquivo existe em /public
-  
-  // Usaremos Sprites simples para máxima performance
-  const treeMat = new THREE.SpriteMaterial({ map: treeTex, color: 0x666666, fog: true });
+  // 4. VEGETAÇÃO (sem textura externa para evitar falha de carga)
+  geometries.tree = new THREE.ConeGeometry(1, 4, 6);
+  materials.tree = new THREE.MeshStandardMaterial({ color: 0x3a4335, roughness: 0.95, fog: true });
+  materials.tree.onBeforeCompile = injectFlashlightShader;
+
+  const trees = new THREE.InstancedMesh(geometries.tree, materials.tree, 60);
   for (let i = 0; i < 60; i++) {
-    const tree = new THREE.Sprite(treeMat);
     const angle = Math.random() * Math.PI * 2;
     const radius = 10 + Math.random() * 40; // Não coloca árvores na cara do player (min 10m)
-    const scale = 5 + Math.random() * 5;
-    
-    tree.position.set(Math.cos(angle) * radius, scale / 2, Math.sin(angle) * radius);
-    tree.scale.set(scale, scale, 1);
-    scene.add(tree);
+    const scale = 1.5 + Math.random() * 1.5;
+
+    _dummyObj.position.set(Math.cos(angle) * radius, scale * 2, Math.sin(angle) * radius);
+    _dummyObj.rotation.y = Math.random() * Math.PI * 2;
+    _dummyObj.scale.set(scale, scale, scale);
+    _dummyObj.updateMatrix();
+    trees.setMatrixAt(i, _dummyObj.matrix);
   }
+  scene.add(trees);
 
   // 5. Cenário Instanciado (Caixas/Pillares ao longe)
   geometries.box = new THREE.BoxGeometry(1, 1, 1);

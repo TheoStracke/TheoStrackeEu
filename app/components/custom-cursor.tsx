@@ -6,7 +6,7 @@ import { useEffect, useRef } from "react";
 const POSITION_SPRING = { damping: 28, stiffness: 280, mass: 0.5 };
 const SCALE_SPRING    = { damping: 22, stiffness: 380, mass: 0.3 };
 
-type CursorState = "default" | "interactive" | "reading" | "hidden";
+type CursorState = "default" | "interactive" | "reading" | "hidden" | "crosshair";
 
 export function CustomCursor() {
   const stateRef = useRef<CursorState>("default");
@@ -19,7 +19,9 @@ export function CustomCursor() {
   const dotScaleRaw  = useMotionValue(1);
   const ringScaleRaw = useMotionValue(1);
   const ringOpacRaw  = useMotionValue(1);
-  const ringBgRaw    = useMotionValue(0); 
+  const ringBgRaw    = useMotionValue(0);
+  const dotColor     = useMotionValue("white");
+  const ringColor    = useMotionValue("white");
 
   const dotScale  = useSpring(dotScaleRaw,  SCALE_SPRING);
   const ringScale = useSpring(ringScaleRaw, SCALE_SPRING);
@@ -28,12 +30,18 @@ export function CustomCursor() {
 
   const applyState = (next: CursorState) => {
     stateRef.current = next;
+    dotColor.set(next === "crosshair" ? "#C8FF00" : "white");
+    ringColor.set(next === "crosshair" ? "#C8FF00" : "white");
+
     switch (next) {
       case "interactive":
         dotScaleRaw.set(0.45); ringScaleRaw.set(1.35); ringOpacRaw.set(1); ringBgRaw.set(1);
         break;
       case "reading":
         dotScaleRaw.set(1); ringScaleRaw.set(0.7); ringOpacRaw.set(0.45); ringBgRaw.set(0);
+        break;
+      case "crosshair":
+        dotScaleRaw.set(1); ringScaleRaw.set(1); ringOpacRaw.set(1); ringBgRaw.set(0);
         break;
       case "hidden":
         dotScaleRaw.set(0); ringScaleRaw.set(1); ringOpacRaw.set(0); ringBgRaw.set(0);
@@ -114,7 +122,7 @@ export function CustomCursor() {
         style={{
           x: mouseX, y: mouseY, translateX: "-50%", translateY: "-50%",
           scale: dotScale,
-          backgroundColor: "white",
+          backgroundColor: dotColor,
           mixBlendMode: "difference",
         }}
       />
@@ -124,7 +132,7 @@ export function CustomCursor() {
         style={{
           x: ringX, y: ringY, translateX: "-50%", translateY: "-50%",
           scale: ringScale, opacity: ringOpac, backgroundColor: ringBg,
-          borderColor: "white",
+          borderColor: ringColor,
           mixBlendMode: "difference",
         }}
       />

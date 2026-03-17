@@ -77,7 +77,7 @@ export function SkillsGraph({ t }: SkillsGraphProps) {
       .force("link",    d3.forceLink<SimNode, SimLink>(links).id((d) => d.id).distance(90).strength(0.4))
       .force("charge",  d3.forceManyBody<SimNode>().strength(-220))
       .force("center",  d3.forceCenter(width / 2, height / 2))
-      .force("collide", d3.forceCollide<SimNode>().radius((d) => CATEGORY_RADIUS[d.category] + 10))
+      .force("collide", d3.forceCollide<SimNode>().radius((d) => CATEGORY_RADIUS[d.category] + 18))
       .alphaDecay(0.03);
 
     simRef.current = sim;
@@ -235,6 +235,11 @@ export function SkillsGraph({ t }: SkillsGraphProps) {
 
     // ── Tick
     sim.on("tick", () => {
+      nodes.forEach((d: SimNode) => {
+        d.x = Math.max(30, Math.min(width - 30, d.x ?? width / 2));
+        d.y = Math.max(30, Math.min(height - 30, d.y ?? height / 2));
+      });
+
       linkEl
         .attr("x1", (d: SimLink) => (d.source as SimNode).x ?? 0)
         .attr("y1", (d: SimLink) => (d.source as SimNode).y ?? 0)
