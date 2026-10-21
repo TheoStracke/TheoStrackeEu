@@ -357,6 +357,9 @@
       "stack": "Stack",
       "gallery": "Galeria"
     },
+    "viewAll": "Ver todos os projetos",
+    "pageLead": "Sistemas, plataformas e sites desenvolvidos de ponta a ponta: da modelagem de dados à interface, com foco em performance e experiência.",
+    "metaDescription": "Projetos de Theo Stracke: sistemas, plataformas e sites desenvolvidos de ponta a ponta.",
     "items": [
       {
         "slug": "sisced",

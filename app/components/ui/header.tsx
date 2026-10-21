@@ -20,7 +20,7 @@ interface HeaderProps {
     briefing: Pick<Dictionary["briefing"], "navCta" | "menuLabel">;
   };
   /** home tem capítulos na página; nas internas os links voltam para a home */
-  page: "home" | "case" | "briefing";
+  page: "home" | "projects" | "case" | "briefing";
 }
 
 /**

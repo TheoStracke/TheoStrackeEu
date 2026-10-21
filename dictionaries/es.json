@@ -357,6 +357,9 @@
       "stack": "Stack",
       "gallery": "Galería"
     },
+    "viewAll": "Ver todos los proyectos",
+    "pageLead": "Sistemas, plataformas y sitios desarrollados de principio a fin: del modelado de datos a la interfaz, con foco en rendimiento y experiencia.",
+    "metaDescription": "Proyectos de Theo Stracke: sistemas, plataformas y sitios desarrollados de principio a fin.",
     "items": [
       {
         "slug": "sisced",

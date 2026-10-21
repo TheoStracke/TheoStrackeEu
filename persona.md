@@ -93,7 +93,7 @@ Mobile (< 768px), `prefers-reduced-motion` ou sem WebGL2: **sem palco** (Three n
 
 - Locales `pt` (default), `en`, `es` — `lib/i18n.ts`. `types/dictionary.ts` deriva o schema do `pt.json` e **falha a compilação** se `en`/`es` divergirem (`DictionaryParity`).
 - `proxy.ts` (ex-middleware): cookie `NEXT_LOCALE` → `Accept-Language` → default; `MAINTENANCE_MODE=true` → `/{locale}/maintenance`.
-- O root layout é `app/[lang]/layout.tsx` (`<html lang>` estático; tudo SSG). Rotas: `/[lang]`, `/[lang]/projetos/[slug]` (case studies), `/[lang]/briefing` (página comercial; o formulário é o Google Forms em `BRIEFING_FORM_URL`, aberto em nova aba; CTAs no header, no menu e no fim de cada case), `/[lang]/maintenance`, `/[lang]/opengraph-image`, `sitemap.ts`, `robots.ts`.
+- O root layout é `app/[lang]/layout.tsx` (`<html lang>` estático; tudo SSG). Rotas: `/[lang]`, `/[lang]/projetos` (lista compartilhável de todos os projetos), `/[lang]/projetos/[slug]` (case studies), `/[lang]/briefing` (página comercial; o formulário é o Google Forms em `BRIEFING_FORM_URL`, aberto em nova aba; CTAs no header, no menu e no fim de cada case), `/[lang]/maintenance`, `/[lang]/opengraph-image`, `sitemap.ts`, `robots.ts`.
 - View Transitions (React 19.3): `transitionTypes={["nav-forward"]}` / `["nav-back"]` nos links; morph `project-{slug}` da prévia para o hero do case.
 - **Toda string visível vai nos 3 dicionários**, com tradução real.
 

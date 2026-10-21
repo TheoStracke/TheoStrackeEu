@@ -353,6 +353,9 @@
       "stack": "Stack",
       "gallery": "Gallery"
     },
+    "viewAll": "View all projects",
+    "pageLead": "Systems, platforms and websites built end to end: from data modeling to interface, with a focus on performance and experience.",
+    "metaDescription": "Projects by Theo Stracke: systems, platforms and websites built end to end.",
     "items": [
       {
         "slug": "sisced",
