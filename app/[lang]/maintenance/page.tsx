@@ -1,37 +1,44 @@
-// app/[lang]/maintenance/page.tsx
-import { isValidLocale } from "../../../lib/i18n";
+import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import type { Locale } from "@/lib/i18n";
-import { MaintenanceClient } from "./MaintenanceClient";
+import { FadeReveal, SplitReveal } from "@/app/components/motion/reveal";
+import { LanguageSwitcher } from "@/app/components/ui/language-switcher";
+import { TsLogo } from "@/app/components/ui/icons";
+import { getDictionary } from "@/lib/getDictionary";
+import { isValidLocale } from "@/lib/i18n";
 
-interface PageProps {
-  params: { lang: string };
+export async function generateMetadata({ params }: PageProps<"/[lang]/maintenance">): Promise<Metadata> {
+  const { lang } = await params;
+  if (!isValidLocale(lang)) return {};
+  const { maintenance } = await getDictionary(lang);
+  return { title: maintenance.title, robots: { index: false } };
 }
 
-export function generateStaticParams() {
-  return [{ lang: "en" }, { lang: "pt" }, { lang: "es" }];
-}
+export default async function MaintenancePage({ params }: PageProps<"/[lang]/maintenance">) {
+  const { lang } = await params;
+  if (!isValidLocale(lang)) notFound();
+  const { maintenance, languageSwitcher } = await getDictionary(lang);
 
-export default function MaintenancePage({ params }: PageProps) {
-  if (!isValidLocale(params.lang)) notFound();
+  return (
+    <main className="container-editorial flex min-h-svh flex-col justify-between py-10">
+      <TsLogo className="h-8 w-auto self-start text-white" />
 
-  const content: Record<Locale, { title: string; desc: string; note: string }> = {
-    pt: {
-      title: "Em manutenção",
-      desc: "Preparando uma nova versão. O sistema estará de volta em breve.",
-      note: "Obrigado pela paciência.",
-    },
-    en: {
-      title: "Under maintenance",
-      desc: "A new version is being prepared. The system will be back shortly.",
-      note: "Thank you for your patience.",
-    },
-    es: {
-      title: "En mantenimiento",
-      desc: "Se está preparando una nueva versión. El sistema volverá pronto.",
-      note: "Gracias por tu paciencia.",
-    },
-  };
+      <div className="flex flex-col gap-8">
+        <p className="label flex items-center gap-3 text-accent">
+          <span
+            className="size-1.5 rounded-full bg-accent [animation:pulse-dot_2.4s_ease-in-out_infinite]"
+            aria-hidden="true"
+          />
+          {maintenance.note}
+        </p>
+        <SplitReveal as="h1" type="chars" className="display text-[clamp(3.4rem,12vw,12rem)] text-white">
+          {maintenance.title}
+        </SplitReveal>
+        <FadeReveal>
+          <p className="max-w-xl text-xl text-white/65">{maintenance.description}</p>
+        </FadeReveal>
+      </div>
 
-  return <MaintenanceClient lang={params.lang as Locale} content={content[params.lang as Locale]} />;
+      <LanguageSwitcher current={lang} label={languageSwitcher.label} />
+    </main>
+  );
 }

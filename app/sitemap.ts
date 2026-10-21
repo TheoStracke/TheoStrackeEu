@@ -1,26 +1,21 @@
-import { MetadataRoute } from 'next'
+import type { MetadataRoute } from "next";
+import ptDictionary from "@/dictionaries/pt.json";
+import { i18n } from "@/lib/i18n";
+import { SITE_URL } from "@/lib/site";
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://theostracke.work';
-  
-  // Os idiomas que tu dás suporte
-  const locales = ['pt', 'en', 'es'];
+  const languages = (path: string) =>
+    Object.fromEntries(i18n.locales.map((locale) => [locale, `${SITE_URL}/${locale}${path}`]));
 
-  // Gera uma rota pra cada idioma
-  const localeRoutes = locales.map((locale) => ({
-    url: `${baseUrl}/${locale}`,
-    lastModified: new Date(),
-    changeFrequency: 'monthly' as const,
-    priority: 1, // Prioridade máxima pras homes traduzidas
-  }));
+  const pages = ["", "/briefing", ...ptDictionary.projects.items.map(({ slug }) => `/projetos/${slug}`)];
 
-  return [
-    {
-      url: baseUrl, // A raiz (que o middleware redireciona)
+  return pages.flatMap((path) =>
+    i18n.locales.map((locale) => ({
+      url: `${SITE_URL}/${locale}${path}`,
       lastModified: new Date(),
-      changeFrequency: 'yearly',
-      priority: 0.8,
-    },
-    ...localeRoutes,
-  ]
+      changeFrequency: "monthly" as const,
+      priority: path === "" ? 1 : 0.8,
+      alternates: { languages: languages(path) },
+    })),
+  );
 }

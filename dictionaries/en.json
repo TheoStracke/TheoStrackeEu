@@ -1,117 +1,82 @@
 {
   "metadata": {
     "title": "Theo Stracke | Software Developer",
-    "description": "Theo Stracke's Portfolio. Front-End Developer with Full Stack expertise in creating high-performance web solutions."
+    "description": "Theo Stracke's portfolio. Front-End Developer with Full Stack expertise in building high-performance web solutions.",
+    "jobTitle": "Full Stack Developer",
+    "ogTagline": "Front-End Engineering & Full Stack Solutions"
   },
-  "navigation": {
-    "sectionsTitle": "Sections",
-    "sections": [
-      { "id": "hero", "label": "Home" },
-      { "id": "about", "label": "About" },
-      { "id": "experience", "label": "Experience" },
-      { "id": "education", "label": "Education" },
-      { "id": "army", "label": "Army" },
-      { "id": "skills", "label": "Skills" },
-      { "id": "projects", "label": "Projects" },
-      { "id": "connect", "label": "Contact" }
-    ]
+  "nav": {
+    "menu": "Menu",
+    "close": "Close",
+    "skipToContent": "Skip to content",
+    "home": "Back to start",
+    "chapters": {
+      "hero": "Home",
+      "about": "About",
+      "education": "Education",
+      "army": "Army",
+      "thomson": "Thomson Reuters",
+      "skills": "Skills",
+      "vellum": "Rede Vellum",
+      "unna": "Unna/Adeprint",
+      "projects": "Projects",
+      "connect": "Contact"
+    }
+  },
+  "cursor": {
+    "view": "View",
+    "open": "Open",
+    "drag": "Drag",
+    "visit": "Visit"
   },
   "languageSwitcher": {
-    "label": "Language",
-    "pt": "PT",
-    "en": "EN"
+    "label": "Language"
+  },
+  "loader": {
+    "label": "Loading experience"
   },
   "hero": {
     "tagline": "Front-End Engineering & Full Stack Solutions",
     "title": "THEO STRACKE.",
     "subtitle": "Front-End Developer specialized in the React and Next.js ecosystem. I build scalable, high-performance interfaces, backed by a solid foundation in Node.js and relational databases.",
     "cta": "View Projects",
-    "cardLabel": "core stack",
     "scrollHint": "scroll to begin",
     "availability": "Available for collaboration",
-    "location": "Palhoça, SC"
-  },
-  "aboutCard": {
-    "description": "I transform complex problems into fast, accessible digital products. My background in enterprise technical support taught me to foresee structural failures before they reach production. My focus is on delivering complete solutions, connecting a robust database architecture to the best possible user experience on the interface.",
-    "points": [
-      "Mastery of the React and Next.js ecosystem",
-      "Scalable architecture and focus on performance"
-    ]
+    "location": "Palhoça, SC",
+    "cardLabel": "core stack",
+    "stack": ["Mastery of the React and Next.js ecosystem", "Scalable architecture and focus on performance"]
   },
   "about": {
-    "title": "About",
     "eyebrow": "Professional Profile",
-    "beat1": "I transform complex problems into fast and accessible digital products.",
-    "beat2": "My background in enterprise technical support taught me to anticipate structural failures before they reach production.",
-    "beat3": "I do not just write code - I deeply understand product rules to propose efficient solutions.",
-    "beat4": "From database to interface, I can work confidently across the entire delivery pipeline.",
-    "description": "My goal is to deliver software that generates real business impact. I don't just write code; I strive to deeply understand product rules to propose technically efficient solutions. My experience in highly demanding corporate environments, combined with my Full Stack work using tools like Node.js, Prisma, and PostgreSQL, allows me to operate confidently across the entire development pipeline. I value clean code, smart componentization, and interfaces designed for high scalability.",
-    "highlights": [
-      "Advanced development with React, Next.js, and TypeScript",
-      "Building RESTful APIs and data modeling",
-      "Critical product vision shaped in enterprise environments"
-    ]
-  },
-  "experience": {
-    "title": "Experience",
-    "eyebrow": "Career Path",
-    "skillButton": "Technologies",
-    "items": [
-      {
-        "company": "Rede Vellum",
-        "period": "Jul/2025 - Present",
-        "role": "Full Stack Developer",
-        "details": "I lead the development and maintenance of web applications essential to operations. I was directly responsible for the conceptualization and implementation of SisCeD, a digital certificate and scheduling management platform that optimized processes and drastically reduced the operational time of the administrative sector. I also work on the frontline of analysis and resolution of technical incidents in production.",
-        "logo": "/images/logos/vellum.png",
-        "skills": [
-          "React",
-          "Node.js",
-          "PostgreSQL",
-          "Express.js",
-          "Prisma",
-          "JWT Authentication"
-        ]
-      },
-      {
-        "company": "Thomson Reuters Brazil",
-        "period": "Feb/2023 - Mar/2025",
-        "role": "Report Support Technician",
-        "details": "Provided specialized technical support to high-level clients resolving incidents in corporate reporting systems. This role honed my analytical ability to track complex data flows, diagnose bottlenecks in production, and collaborate with multidisciplinary teams guided by agile methodologies.",
-        "logo": "/images/logos/thomson-reuters.png",
-        "skills": [
-          "Enterprise Corporate Systems",
-          "Data Flow Analysis",
-          "Agile Methodologies",
-          "Jira",
-          "Incident Resolution"
-        ]
-      },
-      {
-        "company": "Brazilian Army",
-        "period": "Mar/2024 - Jan/2025",
-        "role": "Soldier",
-        "details": "Period of intense development focused on resilience, leadership, and the ability to execute and make decisions under pressure in a highly rigorous technical and disciplinary environment.",
-        "logo": "/images/logos/exercito.png",
-        "skills": [
-          "Execution under Pressure",
-          "Teamwork",
-          "Compliance and Processes",
-          "Conflict Resolution"
-        ]
-      }
-    ]
+    "title": "About",
+    "beats": [
+      "I turn complex problems into fast, accessible digital products.",
+      "My background in enterprise technical support taught me to anticipate structural failures before they reach production.",
+      "I don't just write code: I dig deep into product rules to propose efficient solutions.",
+      "From database to interface, I work confidently across the entire delivery pipeline."
+    ],
+    "imageAlts": ["DespaFácil admin dashboard", "SisCeD scheduling screen", "SisCeD certificates screen"]
   },
   "education": {
-    "title": "Education",
     "eyebrow": "Academic",
-    "skillButton": "Study Focus",
+    "title": "Education",
     "items": [
+      {
+        "degree": "Postgraduate Degree in Agile Methodologies",
+        "institution": "ETEP · Online",
+        "period": "Present",
+        "type": "Postgraduate",
+        "status": "Ongoing",
+        "current": true,
+        "skills": ["Scrum", "Kanban", "Lean"]
+      },
       {
         "degree": "Systems Analysis and Development",
         "institution": "Senac SC",
-        "period": "Feb/2023 - Jul/2026",
+        "period": "Feb 2023 — Aug 2026",
         "type": "Undergraduate Degree",
-        "logo": "/images/logos/senac.png",
+        "status": "Completed",
+        "current": false,
         "skills": [
           "Software Architecture",
           "Relational Database Modeling",
@@ -122,9 +87,10 @@
       {
         "degree": "Digital Game Programming",
         "institution": "Senac SC",
-        "period": "2020 - 2023",
+        "period": "2020 — 2023",
         "type": "Technical High School",
-        "logo": "/images/logos/senac.png",
+        "status": "Completed",
+        "current": false,
         "skills": [
           "Advanced Programming Logic",
           "Object-Oriented Programming",
@@ -135,89 +101,285 @@
     ]
   },
   "army": {
-    "intro": "Night operation engaged. Find the three markers to reveal this chapter of my journey.",
-    "target1": "Mar/2024: service begins with immersion in a high-discipline environment.",
-    "target2": "During the cycle: leadership, execution under pressure, and teamwork were reinforced.",
-    "target3": "Jan/2025: end of cycle with stronger resilience, focus, and decision-making.",
-    "complete": "Mission complete. Proceed to the next chapter.",
-    "skip": "Skip mission"
+    "eyebrow": "Military Service",
+    "title": "Brazilian Army",
+    "role": "Soldier",
+    "period": "Mar 2024 — Jan 2025",
+    "intro": "A night operation. Discipline, silence and absolute focus.",
+    "beats": [
+      "Mar 2024: service begins, adapting to a high-discipline environment.",
+      "Throughout the cycle: leadership, execution under pressure and teamwork reinforced.",
+      "Jan 2025: the cycle ends with stronger resilience, focus and decision-making."
+    ]
   },
   "thomson": {
-    "intro": "Accessing corrupted database...",
-    "instruction": "Connect the nodes to decrypt the reports.",
-    "complete": "Access granted. Systems operational.",
-    "skip": "Force Override",
-    "cards": {
-      "card1": "Specialized technical support for complex corporate incidents.",
-      "card2": "Analytical investigation for deep tracking of data flows.",
-      "card3": "Collaboration guided by agile methodologies in high-pressure environments."
-    }
+    "eyebrow": "Experience",
+    "title": "Thomson Reuters",
+    "role": "Report Support Technician",
+    "period": "Feb 2023 — Mar 2025",
+    "intro": "Accessing corporate reporting systems...",
+    "decrypt": "Decrypting data flows",
+    "cards": [
+      "Specialized technical support for complex corporate incidents.",
+      "Analytical investigation to trace data flows in depth.",
+      "Collaboration guided by agile methodologies in high-pressure environments."
+    ]
+  },
+  "skills": {
+    "eyebrow": "Tech Stack",
+    "title": "Skills",
+    "hint": "Hover a technology to see where it connects.",
+    "nodes": [
+      {
+        "id": "ts",
+        "label": "TypeScript",
+        "category": "language"
+      },
+      {
+        "id": "js",
+        "label": "JavaScript",
+        "category": "language"
+      },
+      {
+        "id": "react",
+        "label": "React",
+        "category": "framework"
+      },
+      {
+        "id": "nextjs",
+        "label": "Next.js",
+        "category": "framework"
+      },
+      {
+        "id": "node",
+        "label": "Node.js",
+        "category": "framework"
+      },
+      {
+        "id": "express",
+        "label": "Express",
+        "category": "framework"
+      },
+      {
+        "id": "tailwind",
+        "label": "Tailwind",
+        "category": "framework"
+      },
+      {
+        "id": "shadcn",
+        "label": "shadcn/ui",
+        "category": "framework"
+      },
+      {
+        "id": "prisma",
+        "label": "Prisma",
+        "category": "tooling"
+      },
+      {
+        "id": "postgres",
+        "label": "PostgreSQL",
+        "category": "database"
+      },
+      {
+        "id": "supabase",
+        "label": "Supabase",
+        "category": "database"
+      },
+      {
+        "id": "framer",
+        "label": "Framer Motion",
+        "category": "tooling"
+      },
+      {
+        "id": "gsap",
+        "label": "GSAP",
+        "category": "tooling"
+      },
+      {
+        "id": "three",
+        "label": "Three.js",
+        "category": "tooling"
+      },
+      {
+        "id": "git",
+        "label": "Git / CI",
+        "category": "tooling"
+      }
+    ],
+    "links": [
+      {
+        "source": "ts",
+        "target": "react",
+        "projects": ["DespaFácil", "SisCeD"]
+      },
+      {
+        "source": "ts",
+        "target": "nextjs",
+        "projects": ["SisCeD"]
+      },
+      {
+        "source": "ts",
+        "target": "node",
+        "projects": ["SisCeD"]
+      },
+      {
+        "source": "react",
+        "target": "nextjs",
+        "projects": ["SisCeD"]
+      },
+      {
+        "source": "react",
+        "target": "tailwind",
+        "projects": ["DespaFácil", "SisCeD"]
+      },
+      {
+        "source": "react",
+        "target": "shadcn",
+        "projects": ["DespaFácil"]
+      },
+      {
+        "source": "react",
+        "target": "framer",
+        "projects": ["SisCeD"]
+      },
+      {
+        "source": "react",
+        "target": "three",
+        "projects": ["Portfolio"]
+      },
+      {
+        "source": "nextjs",
+        "target": "gsap",
+        "projects": ["SisCeD", "Portfolio"]
+      },
+      {
+        "source": "gsap",
+        "target": "three",
+        "projects": ["Portfolio"]
+      },
+      {
+        "source": "node",
+        "target": "express",
+        "projects": ["SisCeD"]
+      },
+      {
+        "source": "node",
+        "target": "prisma",
+        "projects": ["SisCeD"]
+      },
+      {
+        "source": "prisma",
+        "target": "postgres",
+        "projects": ["SisCeD"]
+      },
+      {
+        "source": "supabase",
+        "target": "react",
+        "projects": ["DespaFácil"]
+      },
+      {
+        "source": "ts",
+        "target": "git",
+        "projects": ["DespaFácil", "SisCeD"]
+      },
+      {
+        "source": "tailwind",
+        "target": "shadcn",
+        "projects": ["DespaFácil"]
+      },
+      {
+        "source": "framer",
+        "target": "gsap",
+        "projects": ["SisCeD"]
+      },
+      {
+        "source": "js",
+        "target": "ts",
+        "projects": ["DespaFácil", "SisCeD"]
+      },
+      {
+        "source": "js",
+        "target": "gsap",
+        "projects": ["Isabelly Design"]
+      }
+    ]
   },
   "vellum": {
-    "title": "Vellum",
-    "eyebrow": "Current Experience",
-    "badge": "● In progress",
+    "eyebrow": "Experience",
+    "title": "Rede Vellum",
     "role": "Full Stack Developer",
-    "period": "Feb/2025 - Present",
-    "description": "Leading the development of the SISCED platform, a comprehensive ecosystem for managing and issuing educational certificates. Architecting scalable solutions with Next.js and Node.js to support a growing network of students and institutions.",
+    "period": "Jul 2025 — Apr 2026",
+    "description": "I led the development of SisCeD, a complete certificate and scheduling management platform that optimized processes and drastically cut the administrative team's operational time. I also worked on the front line of analyzing and resolving production incidents.",
     "impact": {
       "label": "Certificates issued",
       "value": 1200
     },
-    "mockupAlt": "Vellum's SISCED system interface",
-    "logoAlt": "Vellum Logo"
+    "mockupAlt": "Rede Vellum's SisCeD system interface",
+    "logoAlt": "Rede Vellum logo",
+    "cta": "View SisCeD case"
   },
-  "skills": {
-    "title": "Skills",
-    "eyebrow": "Tech Stack",
-    "nodes": [
-      { "id": "ts",       "label": "TypeScript",    "category": "language"  },
-      { "id": "js",       "label": "JavaScript",    "category": "language"  },
-      { "id": "react",    "label": "React",         "category": "framework" },
-      { "id": "nextjs",   "label": "Next.js",       "category": "framework" },
-      { "id": "node",     "label": "Node.js",       "category": "framework" },
-      { "id": "express",  "label": "Express",       "category": "framework" },
-      { "id": "tailwind", "label": "Tailwind",      "category": "framework" },
-      { "id": "prisma",   "label": "Prisma",        "category": "tooling"   },
-      { "id": "postgres", "label": "PostgreSQL",    "category": "database"  },
-      { "id": "supabase", "label": "Supabase",      "category": "database"  },
-      { "id": "framer",   "label": "Framer Motion", "category": "tooling"   },
-      { "id": "gsap",     "label": "GSAP",          "category": "tooling"   },
-      { "id": "git",      "label": "Git / CI",      "category": "tooling"   },
-      { "id": "shadcn",   "label": "shadcn/ui",     "category": "framework" }
-    ],
-    "links": [
-      { "source": "ts",      "target": "react",    "projects": ["DespaFácil", "SisCeD"] },
-      { "source": "ts",      "target": "nextjs",   "projects": ["SisCeD"] },
-      { "source": "ts",      "target": "node",     "projects": ["SisCeD"] },
-      { "source": "react",   "target": "nextjs",   "projects": ["SisCeD"] },
-      { "source": "react",   "target": "tailwind", "projects": ["DespaFácil", "SisCeD"] },
-      { "source": "react",   "target": "shadcn",   "projects": ["DespaFácil"] },
-      { "source": "react",   "target": "framer",   "projects": ["SisCeD"] },
-      { "source": "nextjs",  "target": "gsap",     "projects": ["SisCeD"] },
-      { "source": "node",    "target": "express",  "projects": ["SisCeD"] },
-      { "source": "node",    "target": "prisma",   "projects": ["SisCeD"] },
-      { "source": "prisma",  "target": "postgres", "projects": ["SisCeD"] },
-      { "source": "supabase","target": "react",    "projects": ["DespaFácil"] },
-      { "source": "ts",      "target": "git",      "projects": ["DespaFácil", "SisCeD"] },
-      { "source": "tailwind","target": "shadcn",   "projects": ["DespaFácil"] },
-      { "source": "framer",  "target": "gsap",     "projects": ["SisCeD"] },
-      { "source": "js",      "target": "ts",       "projects": ["DespaFácil", "SisCeD"] }
+  "unna": {
+    "eyebrow": "Current Experience",
+    "title": "Unna/Adeprint",
+    "badge": "Current",
+    "role": "Order Desk · ERP Development",
+    "period": "Jul 2026 — Present",
+    "description": "I work on the order desk and, in parallel, I'm building a complete ERP for the company. I live the operation from the inside, and that routine is where the system's requirements come from.",
+    "pillars": [
+      {
+        "title": "Operations",
+        "text": "On the order desk, I follow the business's real workflow up close."
+      },
+      {
+        "title": "Tailor-made ERP",
+        "text": "I'm building a complete ERP designed around the company's processes."
+      },
+      {
+        "title": "Inside view",
+        "text": "The person building the system also lives the routine it needs to solve."
+      }
     ]
   },
   "projects": {
+    "eyebrow": "Case Studies",
     "title": "Projects",
-    "eyebrow": "Success Cases",
-    "hoverCta": "Explore Project",
-    "visitLabel": "Visit Application",
+    "cta": "View case",
+    "visitLabel": "Open application",
+    "back": "Back to portfolio",
+    "next": "Next project",
+    "labels": {
+      "overview": "Overview",
+      "highlights": "Highlights",
+      "stack": "Stack",
+      "gallery": "Gallery"
+    },
     "items": [
       {
+        "slug": "sisced",
+        "title": "SisCeD",
+        "summary": "Certificate and scheduling management",
+        "description": "Scheduling and digital certificate management system built end-to-end for Rede Vellum. The application modernized internal workflows, securing how data moves through the organization and considerably cutting the time required for administrative tasks.",
+        "highlights": [
+          "Built end-to-end for Rede Vellum",
+          "Scheduling and digital certificate management",
+          "Modernized internal workflows with less administrative time"
+        ],
+        "technologies": ["Next.js", "TypeScript", "Node.js", "Express.js", "Prisma", "PostgreSQL"],
+        "href": "https://sisced.redevellum.com.br",
+        "gallery": ["/images/projects/sisced-1.png", "/images/projects/sisced-2.png", "/images/projects/sisced-3.png"]
+      },
+      {
+        "slug": "despafacil",
         "title": "DespaFácil",
-        "description": "Digital dispatch platform designed for scalability and efficiency. It features a multi-flow administrative panel and JWT-based security. The Front-End was built to be highly responsive, consuming a robust REST API managed via Supabase.",
-        "technologies": ["React", "TypeScript", "Vite", "Tailwind CSS", "Shadcn UI", "Supabase"],
+        "summary": "Digital dispatch platform",
+        "description": "Digital dispatch platform designed for scalability and efficiency. It features a multi-flow admin panel and JWT-based security. The Front-End was built to be highly responsive, consuming a robust REST API managed through Supabase.",
+        "highlights": [
+          "Multi-flow admin panel",
+          "JWT-based authentication and security",
+          "Responsive Front-End consuming a REST API via Supabase"
+        ],
+        "technologies": ["React", "TypeScript", "Vite", "Tailwind CSS", "shadcn/ui", "Supabase"],
         "href": "https://despa-facil.vercel.app/",
-        "thumbnail": "/images/projects/despafacil-thumb.svg",
-        "logo": "/images/logos/logodespafacil.svg",
         "gallery": [
           "/images/projects/despafacil-1.png",
           "/images/projects/despafacil-2.png",
@@ -225,30 +387,77 @@
         ]
       },
       {
-        "title": "SisCeD",
-        "description": "Scheduling and digital certificate management system developed end-to-end for Rede Vellum. The application modernized internal workflows, ensuring security in data processing and considerably cutting the time required for administrative tasks.",
-        "technologies": ["Next.js", "TypeScript", "Node.js", "Express.js", "Prisma", "PostgreSQL"],
-        "href": "https://sisced.redevellum.com.br",
-        "thumbnail": "/images/projects/sisced-thumb.svg",
-        "logo": "/images/logos/logosisced.svg",
+        "slug": "isabelly",
+        "title": "Isabelly Design",
+        "summary": "Portfolio for a designer and marketing professional",
+        "description": "Portfolio home page for Isabelly Vieira, a marketing, social media and design professional. The identity pairs an organic green-and-cream palette with high-contrast expanded typography and soft gradients, presenting her manifesto, areas of expertise, career path and contact in a single-page narrative.",
+        "highlights": [
+          "Organic visual identity with expanded typography",
+          "Scroll-driven entrance animations with GSAP and ScrollTrigger",
+          "Smooth scrolling with Lenis and a looping brand marquee"
+        ],
+        "technologies": ["HTML", "CSS", "JavaScript", "GSAP", "ScrollTrigger", "Lenis"],
+        "href": "https://isaschaffer.github.io/IsabellyEu/",
         "gallery": [
-          "/images/projects/sisced-1.png",
-          "/images/projects/sisced-2.png",
-          "/images/projects/sisced-3.png"
+          "/images/projects/isabelly-1.jpg",
+          "/images/projects/isabelly-2.jpg",
+          "/images/projects/isabelly-3.jpg"
         ]
       }
     ]
   },
   "contact": {
-    "title": "Connect",
     "eyebrow": "Professional Contact",
+    "title": "Connect",
+    "lead": "Shall we build something memorable?",
     "email": "Email",
     "linkedin": "LinkedIn",
     "github": "GitHub",
-    "location": "Palhoça, SC - Brazil"
+    "location": "Palhoça, SC — Brazil",
+    "backToTop": "Back to top",
+    "rights": "All rights reserved."
   },
-  "overlay": {
-    "subtitle": "Technical Details",
-    "close": "Close"
+  "maintenance": {
+    "title": "Under maintenance",
+    "description": "A new version is being prepared. The system will be back shortly.",
+    "note": "Thank you for your patience."
+  },
+  "briefing": {
+    "metaTitle": "Briefing — Website design",
+    "metaDescription": "Want a portfolio website with motion, performance and personality? Start with the briefing.",
+    "navCta": "Get a website",
+    "menuLabel": "Build my website",
+    "eyebrow": "Briefing",
+    "title": "Let's build your website.",
+    "lead": "Portfolio websites with the same attention to detail, motion and performance as this one. It all starts with a briefing: tell me who you are, who you speak to and where you want to go.",
+    "stepsTitle": "How it works",
+    "steps": [
+      {
+        "title": "Briefing",
+        "text": "You fill in the form with your goal, audience, references and style."
+      },
+      {
+        "title": "Proposal",
+        "text": "I review your answers and come back with scope, timeline and pricing."
+      },
+      {
+        "title": "Build",
+        "text": "We build the website together, from design to launch."
+      }
+    ],
+    "topicsTitle": "What the briefing covers",
+    "topics": [
+      "Goal and target audience",
+      "Visual style, colors and typography",
+      "Tone of voice and navigation",
+      "Sections and project format",
+      "Available materials and deadline"
+    ],
+    "questions": "18 questions",
+    "cta": "Fill in the briefing",
+    "note": "The form opens in Google Forms in a new tab and is written in Portuguese.",
+    "caseEyebrow": "Like it?",
+    "caseTitle": "Let's build yours.",
+    "caseCta": "Start the briefing"
   }
 }

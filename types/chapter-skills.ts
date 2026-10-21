@@ -1,7 +1,9 @@
+export type SkillCategory = "language" | "framework" | "database" | "tooling";
+
 export interface SkillNode {
   id: string;
   label: string;
-  category: "language" | "framework" | "database" | "tooling";
+  category: SkillCategory;
 }
 
 export interface SkillLink {
@@ -11,8 +13,9 @@ export interface SkillLink {
 }
 
 export interface SkillsGraphDictionary {
-  title: string;
   eyebrow: string;
+  title: string;
+  hint: string;
   nodes: SkillNode[];
   links: SkillLink[];
 }

@@ -1,23 +1,11 @@
-import { getDictionary } from "../../lib/getDictionary";
-import { isValidLocale } from "../../lib/i18n";
 import { notFound } from "next/navigation";
+import { getDictionary } from "@/lib/getDictionary";
+import { isValidLocale } from "@/lib/i18n";
 import { HomePage } from "../components/home-page";
 
-interface PageProps {
-  params: {
-    lang: string;
-  };
-}
-export function generateStaticParams() {
-  return [{ lang: "en" }, { lang: "pt" }, { lang: "es" }];
-}
-
-export default async function LocalizedPage({ params }: PageProps) {
-  if (!isValidLocale(params.lang)) {
-    notFound();
-  }
-
-  const dictionary = await getDictionary(params.lang);
-
-  return <HomePage lang={params.lang} dictionary={dictionary} />;
+export default async function LocalizedPage({ params }: PageProps<"/[lang]">) {
+  const { lang } = await params;
+  if (!isValidLocale(lang)) notFound();
+  const dictionary = await getDictionary(lang);
+  return <HomePage lang={lang} dictionary={dictionary} />;
 }

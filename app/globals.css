@@ -1,145 +1,286 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
+@import "lenis/dist/lenis.css";
 
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;700&family=Space+Grotesk:wght@500;700&display=swap');
+/* ═══════════════════════════════════════════════════════════════════════════
+   Tokens — fonte única da identidade visual (persona.md §3)
+   ═══════════════════════════════════════════════════════════════════════════ */
 
-:root {
-  color-scheme: light;
-  --accent: #c8ff00;
-  --accent-muted: #e8f5a8;
+@theme {
+  --color-background: #080808;
+  --color-ink: #e6e6e6;
+  --color-muted: #8c8c8c;
+  --color-faint: #5c5c5c;
+  --color-line: rgb(255 255 255 / 0.1);
+  --color-accent: #ff3131;
+  --color-paper: #edebe5;
+  --color-paper-ink: #1a1a17;
+  --color-paper-muted: #5f5d57;
+
+  --ease-expo: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-quart: cubic-bezier(0.25, 1, 0.5, 1);
+
+  --tracking-label: 0.18em;
+  --tracking-display: -0.035em;
 }
 
-.chapter-hero {
-  width: 100%;
-  min-height: 100vh;
-  background-color: #080808;
-  position: relative;
-  display: flex;
-  align-items: center;
+/* Fontes carregadas por next/font (variáveis injetadas no <body>) */
+@theme inline {
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+  --font-display: var(--font-space-grotesk), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-jetbrains-mono), ui-monospace, monospace;
 }
 
-.chapter-hero > * {
+/* ═══════════════════════════════════════════════════════════════════════════
+   Base
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+@layer base {
+  :root {
+    color-scheme: dark;
+  }
+
+  html {
+    background-color: var(--color-background);
+    -webkit-text-size-adjust: 100%;
+  }
+
+  body {
+    background-color: var(--color-background);
+    color: var(--color-ink);
+    font-family: var(--font-sans);
+    overflow-x: clip;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  ::selection {
+    background-color: var(--color-accent);
+    color: var(--color-background);
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--color-accent);
+    outline-offset: 4px;
+    border-radius: 2px;
+  }
+
+  img {
+    user-select: none;
+    -webkit-user-drag: none;
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   Camadas do palco: fundos de seção (z-0) → canvas (z-1) → conteúdo (z-2)
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+@layer components {
+  .stage-layer {
+    position: fixed;
+    inset: 0;
+    z-index: 1;
+    pointer-events: none;
+  }
+
+  html[data-menu-open] .stage-layer {
+    z-index: 145;
+  }
+
+  .chapter-content {
+    position: relative;
+    z-index: 2;
+  }
+
+  /* Grão global a 4%: textura editorial sobre tudo */
+  .grain {
+    position: fixed;
+    inset: -50%;
+    z-index: 90;
+    pointer-events: none;
+    opacity: 0.045;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    background-size: 200px 200px;
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   Revelações: escondidas só com JS (sem flash; sem JS tudo fica visível)
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+html.js [data-reveal] {
+  visibility: hidden;
+}
+
+/* Cursor nativo some só quando o cursor customizado está ativo */
+html.has-cursor,
+html.has-cursor * {
+  cursor: none !important;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html.js [data-reveal] {
+    visibility: visible !important;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   Utilitários editoriais
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+@utility label {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: var(--tracking-label);
+  text-transform: uppercase;
+}
+
+@utility display {
+  font-family: var(--font-display);
+  font-weight: 700;
+  letter-spacing: var(--tracking-display);
+  line-height: 0.92;
+}
+
+@utility container-editorial {
   width: 100%;
-  max-width: 72rem; /* max-w-6xl = 1152px */
+  max-width: 88rem;
   margin-inline: auto;
-  padding-inline: clamp(1.5rem, 5vw, 5rem);
+  padding-inline: clamp(1rem, 4vw, 4rem);
 }
 
-.chapter-hero::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  opacity: 0.04;
-  pointer-events: none;
-  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
-  background-size: 200px 200px;
-  z-index: 0;
+/* Linha que se desenha no hover (links editoriais) */
+@utility link-underline {
+  background-image: linear-gradient(currentColor, currentColor);
+  background-size: 0% 1px;
+  background-position: 100% 100%;
+  background-repeat: no-repeat;
+  transition: background-size 0.7s var(--ease-expo);
+
+  &:hover,
+  &:focus-visible {
+    background-size: 100% 1px;
+    background-position: 0% 100%;
+  }
 }
 
-@keyframes bounce {
+@keyframes pulse-dot {
   0%,
   100% {
-    transform: translateY(0);
-    opacity: 0.4;
+    box-shadow: 0 0 0 0 rgb(255 49 49 / 0.55);
   }
-
   50% {
-    transform: translateY(6px);
-    opacity: 1;
+    box-shadow: 0 0 0 7px rgb(255 49 49 / 0);
   }
 }
 
-.scroll-hint {
-  margin-top: 1.25rem;
-  width: fit-content;
-  text-transform: uppercase;
-  letter-spacing: 0.18em;
-  font-size: 11px;
-  color: rgba(240, 240, 240, 0.78);
-}
-
-.scroll-arrow {
-  width: 1px;
-  height: 32px;
-  background: var(--accent);
-  margin: 8px auto 0;
-  animation: bounce 1.8s ease-in-out infinite;
-}
-
-.vignette-overlay {
-  position: absolute;
-  inset: 0;
-  background: radial-gradient(
-    ellipse at center,
-    transparent 20%,
-    rgba(8, 8, 8, 0.6) 60%,
-    rgba(8, 8, 8, 0.95) 100%
-  );
-  pointer-events: none;
-  z-index: 10;
-}
-
-/* FORCE SANS-SERIF TYPOGRAPHY */
-/* TÍTULOS (H1, H2) - SPACE GROTESK */
-h1, h2, h3, .font-display {
-  font-family: 'Space Grotesk', sans-serif !important;
-  font-weight: 700;
-  letter-spacing: -0.03em;
-}
-
-/* CORPO DE TEXTO - INTER */
-body, p, li, span, div {
-  font-family: 'Inter', sans-serif !important;
-  font-weight: 400;
-  line-height: 1.6;
-}
-
-/* DETALHES TÉCNICOS - JETBRAINS MONO */
-.font-mono, header, button, .btn, .tag {
-  font-family: 'JetBrains Mono', monospace !important;
-}
-
-body {
-  background-color: #080808;
-  overflow-x: hidden;
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-}
-
-/* Hide default cursor on desktop only */
-@media (hover: hover) {
-  body {
-    cursor: none;
+@keyframes scroll-cue {
+  0% {
+    transform: scaleY(0);
+    transform-origin: top;
   }
-  
-  a, button, .cursor-hover {
-    cursor: none;
+  45% {
+    transform: scaleY(1);
+    transform-origin: top;
+  }
+  55% {
+    transform: scaleY(1);
+    transform-origin: bottom;
+  }
+  100% {
+    transform: scaleY(0);
+    transform-origin: bottom;
   }
 }
 
-a {
-  text-decoration: none;
+/* ═══════════════════════════════════════════════════════════════════════════
+   View Transitions (navegação portfólio ↔ case study)
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+::view-transition-group(.morph) {
+  animation-duration: 900ms;
+  animation-timing-function: var(--ease-expo);
 }
 
-/* Keep scrollbars unobtrusive */
+::view-transition-old(.nav-forward) {
+  animation:
+    420ms var(--ease-quart) both vt-fade-out,
+    700ms var(--ease-expo) both vt-lift-out;
+}
+
+::view-transition-new(.nav-forward) {
+  animation:
+    500ms var(--ease-quart) 200ms both vt-fade-in,
+    900ms var(--ease-expo) both vt-lift-in;
+}
+
+::view-transition-old(.nav-back) {
+  animation:
+    420ms var(--ease-quart) both vt-fade-out,
+    700ms var(--ease-expo) both vt-drop-out;
+}
+
+::view-transition-new(.nav-back) {
+  animation:
+    500ms var(--ease-quart) 200ms both vt-fade-in,
+    900ms var(--ease-expo) both vt-drop-in;
+}
+
+@keyframes vt-fade-in {
+  from {
+    opacity: 0;
+  }
+}
+
+@keyframes vt-fade-out {
+  to {
+    opacity: 0;
+  }
+}
+
+@keyframes vt-lift-out {
+  to {
+    transform: translateY(-48px);
+  }
+}
+
+@keyframes vt-lift-in {
+  from {
+    transform: translateY(72px);
+  }
+}
+
+@keyframes vt-drop-out {
+  to {
+    transform: translateY(48px);
+  }
+}
+
+@keyframes vt-drop-in {
+  from {
+    transform: translateY(-72px);
+  }
+}
+
+/* Barra de rolagem discreta */
 ::-webkit-scrollbar {
-  width: 10px;
+  width: 8px;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: rgba(10, 10, 10, 0.25);
+  background: rgb(255 255 255 / 0.14);
   border-radius: 999px;
 }
 
 ::-webkit-scrollbar-track {
   background: transparent;
-}
-
-/* Esconde o cursor customizado em dispositivos com tela de toque antes do JS carregar */
-@media (pointer: coarse) {
-  #custom-cursor, 
-  .custom-cursor-container {
-    display: none !important;
-  }
 }

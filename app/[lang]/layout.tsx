@@ -1,114 +1,101 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
+import { Inter, JetBrains_Mono, Space_Grotesk } from "next/font/google";
 import { notFound } from "next/navigation";
-import { getDictionary } from "../../lib/getDictionary";
-import { i18n, isValidLocale } from "../../lib/i18n";
-import { PageTransition } from "../components/page-transition";
-import { LoadingScreen } from "../components/loading-screen";
+import { getDictionary } from "@/lib/getDictionary";
+import { htmlLang, i18n, isValidLocale, ogLocale } from "@/lib/i18n";
+import { CONTACT, SITE_URL } from "@/lib/site";
+import { SmoothScroll } from "../components/providers/smooth-scroll";
+import { Cursor } from "../components/ui/cursor";
+import "../globals.css";
 
-
-// Coloca o teu domínio real aqui para o Next.js conseguir montar as URLs absolutas
-const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://theostracke.work";
-
-interface LangLayoutProps {
-  children: React.ReactNode;
-  params: {
-    lang: string;
-  };
-}
+const inter = Inter({ subsets: ["latin"], variable: "--font-inter", display: "swap", weight: ["400", "500"] });
+const spaceGrotesk = Space_Grotesk({
+  subsets: ["latin"],
+  variable: "--font-space-grotesk",
+  display: "swap",
+  weight: ["500", "700"],
+});
+const jetbrainsMono = JetBrains_Mono({
+  subsets: ["latin"],
+  variable: "--font-jetbrains-mono",
+  display: "swap",
+  weight: ["500"],
+});
 
 export function generateStaticParams() {
   return i18n.locales.map((lang) => ({ lang }));
 }
 
-export async function generateMetadata({ params }: LangLayoutProps): Promise<Metadata> {
-  if (!isValidLocale(params.lang)) {
-    return {};
-  }
+export const dynamicParams = false;
 
-  const dictionary = await getDictionary(params.lang);
+export const viewport: Viewport = {
+  themeColor: "#080808",
+  colorScheme: "dark",
+};
+
+export async function generateMetadata({ params }: LayoutProps<"/[lang]">): Promise<Metadata> {
+  const { lang } = await params;
+  if (!isValidLocale(lang)) return {};
+  const dictionary = await getDictionary(lang);
 
   return {
     metadataBase: new URL(SITE_URL),
-    title: dictionary.metadata.title,
+    title: { default: dictionary.metadata.title, template: `%s · Theo Stracke` },
     description: dictionary.metadata.description,
-    // Configuração para o Google entender as variações de idioma (Hreflang)
+    icons: { icon: "/images/logos/ts.svg" },
     alternates: {
-      canonical: `/${params.lang}`,
-      languages: {
-        pt: "/pt",
-        en: "/en",
-        es: "/es",
-      },
+      canonical: `/${lang}`,
+      languages: Object.fromEntries(i18n.locales.map((locale) => [locale, `/${locale}`])),
     },
-    // Open Graph: Como o teu site aparece no LinkedIn, Facebook, WhatsApp...
     openGraph: {
       title: dictionary.metadata.title,
       description: dictionary.metadata.description,
-      url: `${SITE_URL}/${params.lang}`,
-      siteName: "Theo Stracke Portfolio",
-      locale: params.lang === "en" ? "en_US" : params.lang === "es" ? "es_ES" : "pt_BR",
+      url: `${SITE_URL}/${lang}`,
+      siteName: "Theo Stracke",
+      locale: ogLocale[lang],
       type: "website",
-      images: [
-        {
-          url: "/og-image.png", // A imagem que vamos criar no próximo card!
-          width: 1200,
-          height: 630,
-          alt: "Theo Stracke - Desenvolvedor de Software",
-        },
-      ],
     },
-    // Configuração específica pro Twitter (X)
     twitter: {
       card: "summary_large_image",
       title: dictionary.metadata.title,
       description: dictionary.metadata.description,
-      images: ["/og-image.png"],
     },
   };
 }
 
-export default function LangLayout({ children, params }: LangLayoutProps) {
-  if (!isValidLocale(params.lang)) {
-    notFound();
-  }
+export default async function LangLayout({ children, params }: LayoutProps<"/[lang]">) {
+  const { lang } = await params;
+  if (!isValidLocale(lang)) notFound();
+  const dictionary = await getDictionary(lang);
 
-  // JSON-LD (Schema.org): O "RG" do teu portfólio pro Googlebot ler
+  // JSON-LD (Schema.org) da pessoa por trás do portfólio
   const jsonLd = {
     "@context": "https://schema.org",
     "@type": "Person",
     name: "Theo Stracke",
-    jobTitle: "Desenvolvedor Full Stack",
+    jobTitle: dictionary.metadata.jobTitle,
     url: SITE_URL,
-    sameAs: [
-      "https://linkedin.com/in/theostracke",
-      "https://github.com/theostracke"
-    ],
-    worksFor: {
-      "@type": "Organization",
-      name: "Rede Vellum"
-    },
-    alumniOf: {
-      "@type": "CollegeOrUniversity",
-      name: "Senac SC"
-    },
-    address: {
-      "@type": "PostalAddress",
-      addressLocality: "Palhoça",
-      addressRegion: "SC",
-      addressCountry: "BR"
-    }
+    email: `mailto:${CONTACT.email}`,
+    sameAs: [CONTACT.linkedin, CONTACT.github],
+    worksFor: { "@type": "Organization", name: "Unna/Adeprint" },
+    alumniOf: { "@type": "CollegeOrUniversity", name: "Senac SC" },
+    address: { "@type": "PostalAddress", addressLocality: "Palhoça", addressRegion: "SC", addressCountry: "BR" },
   };
 
   return (
-    <>
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
-      />
-      <LoadingScreen />
-      <div className="min-h-screen bg-[#080808] text-white">
-        <PageTransition lang={params.lang}>{children}</PageTransition>
-      </div>
-    </>
+    <html lang={htmlLang[lang]} suppressHydrationWarning>
+      <head>
+        {/* marca a presença de JS antes da pintura: revelações começam ocultas sem flash */}
+        <script dangerouslySetInnerHTML={{ __html: "document.documentElement.classList.add('js')" }} />
+      </head>
+      <body className={`${inter.variable} ${spaceGrotesk.variable} ${jetbrainsMono.variable}`}>
+        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
+        <SmoothScroll>
+          {children}
+          <Cursor labels={dictionary.cursor} />
+        </SmoothScroll>
+        <div className="grain" aria-hidden="true" />
+      </body>
+    </html>
   );
 }
